@@ -3,14 +3,15 @@ const jwt = require("jsonwebtoken");
 const { validationResult } = require("express-validator");
 const User = require("../models/User");
 
-// userregistration
+// userregistration function
 const registerUser = async(req, res) =>{
-    const errors = validationResult(req);
+    const errors = validationResult(req); //checking validation
     if(!errors.isEmpty()) return res.status(400).json({errors: errors.array()});
 
-    const {name, email, password, nid, role } = req.body;
+    const {name, email, password, nid, role, username } = req.body;
 
-    const image = req.file ? req.file.filename : "";
+    //store image in image variable
+    const image = req.file ? req.file.filename : ""; 
 
     try{
         let user = await User.findOne({ email });    //checking is this email already exist or not
@@ -19,24 +20,26 @@ const registerUser = async(req, res) =>{
         user = await User.findOne({nid});        //checking is this NID already exist or not
         if(user) return res.status(400).json({msg:"NID alrady exist"});
 
+        // to check all fields are filled
+        if(!name || !email || !password || !nid || !role) return res.status(400).json({msg: "All fields are required"});
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        user = new User ({name, email, password:hashedPassword, nid, image, role});
+        // creating new user
+        user = new User ({name, email, password:hashedPassword, nid, image, role, username});
         await user.save();
-
         res.status(201).json({msg : "User Register successfully", user});
     } catch (error) {
-        res.status(500).json({msg: "Server error"});
+        res.status(500).json({msg: `Server error while registering user ${error}`});
     }
 }
 
 // User login 
 const loginUser =  async (req, res) => {
     const errors = validationResult(req);
-    if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
+    if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() }); 
   
-    const { email, password } = req.body;
+    const { email, password, role } = req.body; //taking email and password from user
   
     try {
       const user = await User.findOne({ email }); // finding the email
@@ -45,8 +48,12 @@ const loginUser =  async (req, res) => {
       const isMatch = await bcrypt.compare(password, user.password); //matching password
       if (!isMatch) return res.status(400).json({ msg: "Invalid credentials" });
   
+      const isRole = user.role === role; //checking role
+      if (!isRole) return res.status(400).json({ msg: "Invalid credentials" });
+      //creating token
       const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: "7d" });
       
+      //sending token to cookie
       res.cookie("token", token, { httpOnly: true, secure: true, sameSite: "strict"})
          .json({ 
             message: "Login successful", 
