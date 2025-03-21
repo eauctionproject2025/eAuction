@@ -16,15 +16,15 @@ export default function Home() {
   const role = useRole();
   return (
     <div className="w-full flex flex-col items-center justify-center">
-            <div className="flex py-2">
-            <div className="flex-grow">
-              <input type="text" className="w-full text-black bg-gray-200 text-[12px] md:text-[15px] lg:text-[17px] p-1 pl-2 rounded-md border-0" placeholder="2025 civic sedan"/>
+            <div className="w-full flex items-center justify-center py-[20px] gap-2">
+              <div className="w-[50%]">
+                <input type="text" className="w-full text-black bg-gray-200 text-[12px] md:text-[15px] lg:text-[17px] p-2 pl-2 rounded-md border-0" placeholder="2025 civic sedan"/>
+              </div>
+              <div className="flex">
+                <Image src={searchIcon} alt="search icon" className="w-[35px] py-2 cursor-pointer"/>
+              </div>
             </div>
-            <div className="flex">
-              <Image src={searchIcon} alt="search icon" className="w-[35px] px-2 cursor-pointer"/>
-            </div>
-            </div>
-        <div className="w-[90%] grid grid-cols-4 gap-5">
+        <div className="w-[90%] grid grid-cols-1 md:grid-cols-4  gap-5">
             <Auction imgLink={bike} href={"#"} title={'FZ X'} price={"3050000"}/>
             <Auction imgLink={car} href={"#"} title={'Super Car'} price={"18050000"}/>
             <Auction imgLink={house} href={"#"} title={'House'} price={"23050000"}/>

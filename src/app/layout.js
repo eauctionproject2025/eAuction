@@ -30,7 +30,7 @@ export default function RootLayout({ children, session }) {
         <Navbar/>
         </div>
         {children}
-        <div className="w-full flex items-center justify-center bg-[url('/bg/aution.jpg')] bg-cover bg-center">
+        <div className="w-full flex items-center justify-center">
           <Footer/>
         </div>
         </SessionProviderWrapper>

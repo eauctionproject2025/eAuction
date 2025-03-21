@@ -6,7 +6,7 @@ import Link from 'next/link'
 
 function Auction({imgLink, href, title, price}) {
   return (
-    <div className='bg-gray-900 border-2 border-gray-600 rounded-md p-4 gap-2 flex flex-col items-center justify-between'>
+    <div className='md:bg-gray-900 border-2 border-gray-600 rounded-md p-4 gap-2 flex flex-col items-center justify-between'>
         <div>
             <Image src={imgLink} alt='auction'></Image>
         </div>
