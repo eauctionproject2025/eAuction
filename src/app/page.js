@@ -11,9 +11,19 @@ import house from "@/public/item/house.jpeg";
 import bike from "@/public/item/bike.jpeg";
 import painting from "@/public/item/painting.jpeg";
 import searchIcon from "@/public/icon/search.svg";
+import { useSession } from "next-auth/react";
+
 
 export default function Home() {
-  const role = useRole();
+
+  const { data: session } = useSession();
+  
+  if (session?.user?.role) {
+    console.log("User Role:", session.user.role);
+  } else {
+    console.log("No Role Found");
+  }
+
   return (
     <div className="w-full flex flex-col items-center justify-center">
             <div className="w-full flex items-center justify-center py-[20px] gap-2">
@@ -21,10 +31,10 @@ export default function Home() {
                 <input type="text" className="w-full text-black bg-gray-200 text-[12px] md:text-[15px] lg:text-[17px] p-2 pl-2 rounded-md border-0" placeholder="2025 civic sedan"/>
               </div>
               <div className="flex">
-                <Image src={searchIcon} alt="search icon" className="w-[35px] py-2 cursor-pointer"/>
+                <Image src={searchIcon} alt="search icon" className="w-[25px] md:w-[35px] py-2 cursor-pointer"/>
               </div>
             </div>
-        <div className="w-[90%] grid grid-cols-1 md:grid-cols-4  gap-5">
+        <div className="w-[90%] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4  gap-5">
             <Auction imgLink={bike} href={"#"} title={'FZ X'} price={"3050000"}/>
             <Auction imgLink={car} href={"#"} title={'Super Car'} price={"18050000"}/>
             <Auction imgLink={house} href={"#"} title={'House'} price={"23050000"}/>

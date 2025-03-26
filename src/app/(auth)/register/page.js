@@ -31,6 +31,10 @@ function RegisterPage() {
       alert("All fields must be filled");
       return;
     }
+    if (nid.length < 10 || nid.length > 10) {
+      alert("NID number must be 10 digit");
+      return;
+    }
     // make sure password is at least 6 characters
     if (password.length < 6) {
       alert("Password must be at least 6 characters");
@@ -44,7 +48,7 @@ function RegisterPage() {
     try {
       const response = await registerUser(formData); // register function from authService
       alert(response.msg || "Registration successful! please login");
-      router.push('/');
+      router.push('/login');
     } catch (error) {
       alert(error.data?.msg || 'Register Failed, not able to connect to server');
     }
@@ -194,8 +198,7 @@ function RegisterPage() {
                       className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                     >
                       <option> buyer</option>
-                      <option> saller </option>
-                      <option> admin </option>
+                      <option> seller </option>
                     </select>
                   </div>
                 </div>

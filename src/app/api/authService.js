@@ -1,6 +1,6 @@
 import axios from 'axios';
-
-const API_URL = 'http://localhost:5000/api/auth';
+ 
+const API_URL = `${process.env.NEXT_BACKEND_URL}/api/auth`;
 
 //Register user
 export const registerUser = async (userData) => {
@@ -20,6 +20,7 @@ export const registerUser = async (userData) => {
 export const loginUser = async (Credentials) => {
     try {
       const response = await axios.post(`${API_URL}/login`, Credentials, {
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
       });
   

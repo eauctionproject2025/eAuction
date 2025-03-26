@@ -1,7 +1,5 @@
 import Image from 'next/image'
 import React from 'react'
-import car from '../public/item/car1.jpg'
-import { Titillium_Web } from 'next/font/google'
 import Link from 'next/link'
 
 function Auction({imgLink, href, title, price}) {

@@ -8,36 +8,47 @@ const handler = NextAuth({
       name: "Credentials",
       credentials: {
         email: { label: "Email", type: "text" },
-        password: { label: "Password", type: "password" }
+        password: { label: "Password", type: "password" },
+        role: { label: "Role", type: "text" }
       },
       async authorize(credentials) {
-        const user = await loginUser({
-          email: credentials.email,
-          password: credentials.password
-        });
-
-        if (user) {
+        try {
+          const response = await loginUser({
+            email: credentials.email,
+            password: credentials.password,
+            role: credentials.role, 
+          });
+      
+          if (response?.error) {
+            throw new Error( "Login failed in authorization");
+          }
+            // console.log("user from authorization", response.user)
           return {
-            id: user.id,
-            name: user.name,
-            email: user.email,
-            role: user.role, // Pass role
+            id: response.user.id,
+            name: response.user.name,
+            email: response.user.email,
+            role: response.user.role, // Pass the role
           };
+        } catch (error) {
+          console.error("Authorization Error:", error.data, "Login failed in authorization 2");
+          return null;
         }
-        return null;
-      }
+      },
+      
     })
   ],
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
         token.role = user.role;
+        // console.log(user, "user", "token :", token);
       }
       return token;
     },
     async session({ session, token }) {
       if (token) {
-        session.user.role = token.role;
+        session.user = { ...session.user, role: token.role };
+        // console.log(session)
       }
       return session;
     }
@@ -47,7 +58,7 @@ const handler = NextAuth({
   },
   secret: process.env.NEXTAUTH_SECRET,
 });
-console.log("NEXTAUTH_URL:", process.env.NEXTAUTH_URL);
-console.log("NEXTAUTH_SECRET:", process.env.NEXTAUTH_SECRET ? "Loaded" : "Not Loaded");
+// console.log("NEXTAUTH_URL:", process.env.NEXTAUTH_URL);
+// console.log("NEXTAUTH_SECRET:", process.env.NEXTAUTH_SECRET ? "Loaded" : "Not Loaded");
 
 export { handler as GET, handler as POST };

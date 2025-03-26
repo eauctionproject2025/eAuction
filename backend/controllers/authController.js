@@ -47,9 +47,10 @@ const loginUser =  async (req, res) => {
   
       const isMatch = await bcrypt.compare(password, user.password); //matching password
       if (!isMatch) return res.status(400).json({ msg: "Invalid credentials" });
-  
-      const isRole = user.role === role; //checking role
-      if (!isRole) return res.status(400).json({ msg: "Invalid credentials" });
+      
+      const isRoleMatch = user.role === role; 
+      if (!isRoleMatch) return res.status(400).json({ msg: "Invalid credentials" });
+      
       //creating token
       const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: "7d" });
       
