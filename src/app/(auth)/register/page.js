@@ -67,7 +67,7 @@ function RegisterPage() {
               <div className="col-span-6 md:col-span-3">
                 <label
                   htmlFor="first-name"
-                  className="block text-sm/6 font-medium text-gray-300"
+                  className="block text-sm/6 font-medium text-gray-100"
                 >
                   First name
                 </label>
@@ -78,7 +78,6 @@ function RegisterPage() {
                     type="text"
                     required
                     autoComplete="given-name"
-                    placeholder="Asem"
                     className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                   />
                 </div>
@@ -87,7 +86,7 @@ function RegisterPage() {
               <div className="col-span-6 md:col-span-3">
                 <label
                   htmlFor="last-name"
-                  className="block text-sm/6 font-medium text-gray-300"
+                  className="block text-sm/6 font-medium text-gray-100"
                 >
                   Last name
                 </label>
@@ -98,8 +97,7 @@ function RegisterPage() {
                     type="text"
                     required
                     autoComplete="family-name"
-                    placeholder="Rashed"
-                    className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-700 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                    className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                   />
                 </div>
               </div>
@@ -107,7 +105,7 @@ function RegisterPage() {
               <div className="col-span-6">
                 <label
                   htmlFor="email"
-                  className="block text-sm/6 font-medium text-gray-300"
+                  className="block text-sm/6 font-medium text-gray-100"
                 >
                   Email address
                 </label>
@@ -118,7 +116,6 @@ function RegisterPage() {
                     type="email"
                     required
                     autoComplete="email"
-                    placeholder="Enter your email address"
                     className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                   />
                 </div>
@@ -127,7 +124,7 @@ function RegisterPage() {
               <div className="col-span-6">
                 <label
                   htmlFor="nid"
-                  className="block text-sm/6 font-medium text-gray-300"
+                  className="block text-sm/6 font-medium text-gray-100"
                 >
                   NID Number
                 </label>
@@ -138,7 +135,6 @@ function RegisterPage() {
                     type="number"
                     required
                     autoComplete="nid"
-                    placeholder="Enter your NID number"
                     className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                   />
                 </div>
@@ -146,7 +142,7 @@ function RegisterPage() {
               <div className="col-span-6 md:col-span-3">
                 <label
                   htmlFor="password"
-                  className="block text-sm/6 font-medium text-gray-300"
+                  className="block text-sm/6 font-medium text-gray-100"
                 >
                   Enter new Password
                 </label>
@@ -157,7 +153,6 @@ function RegisterPage() {
                     type="text"
                     required
                     autoComplete="password"
-                    placeholder="Enter Password"
                     className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                   />
                 </div>
@@ -165,7 +160,7 @@ function RegisterPage() {
               <div className="col-span-6 md:col-span-3">
                 <label
                   htmlFor="confirmPassword"
-                  className="block text-sm/6 font-medium text-gray-300"
+                  className="block text-sm/6 font-medium text-gray-100"
                 >
                   Confirm Password
                 </label>
@@ -176,8 +171,7 @@ function RegisterPage() {
                     type="text"
                     required
                     autoComplete="confirmPassword"
-                    placeholder="Confirm Password"
-                    className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                    className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                   />
                 </div>
               </div>
@@ -186,7 +180,7 @@ function RegisterPage() {
                 <div className="flex items-center justify-center md:justify-start gap-3">
                   <label
                     htmlFor="role"
-                    className="block text-sm/6 font-medium text-gray-300"
+                    className="block text-sm/6 font-medium text-gray-100"
                   >
                     Register as a : 
                   </label>
@@ -195,7 +189,7 @@ function RegisterPage() {
                       id="role"
                       name="role"
                       autoComplete="role-name"
-                      className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                      className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-gray-700 text-white py-1.5 pr-8 pl-3 text-base text-gray-900  focus:-outline-offset-2 sm:text-sm/6"
                     >
                       <option> buyer</option>
                       <option> seller </option>
@@ -209,7 +203,7 @@ function RegisterPage() {
           <div className="mt-6 flex items-center  justify-center md:justify-end gap-x-6">
             <button
               type="button"
-              className="text-sm/6 font-semibold text-gray-300"
+              className="text-sm/6 font-semibold text-gray-200"
             >
               Cancel
             </button>

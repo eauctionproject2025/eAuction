@@ -28,6 +28,7 @@ const handler = NextAuth({
             name: response.user.name,
             email: response.user.email,
             role: response.user.role, // Pass the role
+            // accessToken: response.accessToken,
           };
         } catch (error) {
           console.error("Authorization Error:", error.data, "Login failed in authorization 2");
@@ -41,13 +42,14 @@ const handler = NextAuth({
     async jwt({ token, user }) {
       if (user) {
         token.role = user.role;
-        // console.log(user, "user", "token :", token);
+        token.accessToken = user.accessToken;
       }
       return token;
     },
     async session({ session, token }) {
       if (token) {
         session.user = { ...session.user, role: token.role };
+        session.token = token.accessToken;
         // console.log(session)
       }
       return session;

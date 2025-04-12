@@ -26,7 +26,7 @@ export default function RootLayout({ children, session }) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col items-center`}
       >
         <SessionProviderWrapper session={session}>
-        <div className=" w-full flex items-center justify-center border-b-2 border-[#333]">
+        <div className=" w-full flex items-center justify-center border-b-1 border-[#00000033]">
         <Navbar/>
         </div>
         {children}

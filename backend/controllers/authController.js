@@ -58,7 +58,8 @@ const loginUser =  async (req, res) => {
       res.cookie("token", token, { httpOnly: true, secure: true, sameSite: "strict"})
          .json({ 
             message: "Login successful", 
-            user: { id: user._id, name: user.name, email: user.email, nid: user.nid, image: user.image, role: user.role } 
+            user: { id: user._id, name: user.name, email: user.email, nid: user.nid, image: user.image, role: user.role },
+            // accessToken: response.token,
         });
     } catch (error) {
       res.status(500).json({ msg: "Server error" });

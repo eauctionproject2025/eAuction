@@ -20,7 +20,7 @@ function Navbar() {
   const { data: session } = useSession();
 
   return (
-    <div className="w-[90%] navbar flex bg-base-100 shadow-sm items-center justify-center">
+    <div className="w-[90%] h-[140px] navbar flex bg-base-100 shadow-sm items-center justify-center">
      <nav className="w-full">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <Link href="/" className="flex items-center space-x-3 rtl:space-x-reverse">

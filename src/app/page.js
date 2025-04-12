@@ -26,12 +26,12 @@ export default function Home() {
 
   return (
     <div className="w-full flex flex-col items-center justify-center">
-            <div className="w-full flex items-center justify-center py-[20px] gap-2">
+            <div className="w-full flex items-center justify-center py-[20px] gap-1">
               <div className="w-[50%]">
-                <input type="text" className="w-full text-black bg-gray-200 text-[12px] md:text-[15px] lg:text-[17px] p-2 pl-2 rounded-md border-0" placeholder="2025 civic sedan"/>
+                <input type="text" className="w-full text-black bg-gray-200 text-[12px] md:text-[15px] lg:text-[17px] p-2 pl-2 rounded-md border-0"/>
               </div>
-              <div className="flex">
-                <Image src={searchIcon} alt="search icon" className="w-[25px] md:w-[35px] py-2 cursor-pointer"/>
+              <div className="flex h-[60%] bg-[#B5FCCD] rounded-md p-2">
+                <Image src={searchIcon} alt="search icon" className="w-[25px] md:w-[25px] cursor-pointer"/>
               </div>
             </div>
         <div className="w-[90%] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4  gap-5">

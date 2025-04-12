@@ -25,10 +25,9 @@ function page() {
       });
   
       if (result?.error) {
-        alert(result.error || "Login Failed");
+        alert( "Login Failed");
       } else {
         router.push('/');
-        alert(`WELCOME ${email}`);
       }
     } catch (error) {
       alert("An unexpected error occurred. Please try again.");
@@ -46,7 +45,7 @@ function page() {
   
             <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                <div className="sm:col-span-6">
-                <label htmlFor="email" className="block text-sm/6 font-medium text-gray-300">
+                <label htmlFor="email" className="block text-sm/6 font-medium text-gray-100">
                   Email address
                 </label>
                 <div className="mt-2">
@@ -56,14 +55,13 @@ function page() {
                     type="email"
                     required
                     autoComplete="email"
-                    placeholder="Enter your email address"
                     className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                   />
                 </div>
               </div>
 
               <div className="sm:col-span-6">
-                <label htmlFor="password" className="block text-sm/6 font-medium text-gray-300">
+                <label htmlFor="password" className="block text-sm/6 font-medium text-gray-100">
                   Enter Password
                 </label>
                 <div className="mt-2">
@@ -73,7 +71,6 @@ function page() {
                     type="password"
                     required
                     autoComplete="password"
-                    placeholder="Enter your password"
                     className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                   />
                 </div>
@@ -81,7 +78,7 @@ function page() {
               
               <div className="sm:col-span-3 w-[100%] flex justify-between gap-9">
                 <div className=" cols-span-3">
-                  <label htmlFor="role" className="block text-sm/6 font-medium text-gray-300">
+                  <label htmlFor="role" className="block text-sm/6 font-medium text-gray-100">
                       Role
                   </label>
                   <div className="mt-2 grid grid-cols-1">
@@ -89,7 +86,7 @@ function page() {
                       id="role"
                       name="role"
                       autoComplete="role-name"
-                      className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                      className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-gray-700 text-white py-1.5 pr-8 pl-3 text-base text-gray-900 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                       >
                       <option> buyer</option>
                       <option> seller </option>
@@ -109,7 +106,7 @@ function page() {
             Login
           </button>
         </div>
-        <p className="text-blue-400 py-2 text-center md:text-left"><Link href={"/register"}>Create an account</Link></p>
+        <p className="text-blue-300 py-2 text-center md:text-left"><Link href={"/register"}>Create an account</Link></p>
 
         </div>
       </form>
