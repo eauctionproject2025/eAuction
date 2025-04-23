@@ -11,7 +11,7 @@ function RegisterPage() {
 
     const name = e.target["first-name"].value + " " + e.target["last-name"].value;
     const email = e.target.email.value.trim();
-    const nid = parseInt(e.target.nid.value);
+    const nid = (e.target.nid.value);
     const password = e.target.password.value.trim();
     const confirmPassword = e.target.confirmPassword.value.trim();
     const role = e.target.role.value;
@@ -33,6 +33,7 @@ function RegisterPage() {
     }
     if (nid.length !== 10) {
       alert("NID number must be 10 digit");
+      console.log(typeof(nid));
       return;
     }
     // make sure password is at least 6 characters
