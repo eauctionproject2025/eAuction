@@ -31,7 +31,7 @@ function RegisterPage() {
       alert("All fields must be filled");
       return;
     }
-    if (nid.length < 10 || nid.length > 10) {
+    if (nid.length !== 10) {
       alert("NID number must be 10 digit");
       return;
     }

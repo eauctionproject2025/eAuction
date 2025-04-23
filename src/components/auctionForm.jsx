@@ -1,6 +1,7 @@
 "use client"
 import { useState } from "react";
 import { getSession } from 'next-auth/react';
+import axios from 'axios';
 
 export default function AuctionForm() {
   const [title, setTitle] = useState("");
@@ -33,10 +34,10 @@ export default function AuctionForm() {
       formData.append("image", image);
     }
   
-    const res = await fetch('http://localhost:5000/api/auctions', {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auctions`, {
       method: 'POST',
       body: formData,
-      credentials: 'include' // ✅ IMPORTANT!
+      credentials: 'include' 
     });
     
   

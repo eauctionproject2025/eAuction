@@ -9,7 +9,7 @@ function Auction({imgLink, href, title, price}) {
   
   const { data: session } = useSession();
   return (
-    <div className='md:bg-[#B5FCCD] text-black shadow-md rounded-md p-4 gap-2 flex flex-col items-center justify-between'>
+    <div className='bg-[#B5FCCD] text-black shadow-md rounded-md p-4 gap-2 flex flex-col items-center justify-between'>
         <div>
             <Image src={imgLink} alt='auction'></Image>
         </div>
