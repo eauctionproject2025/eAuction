@@ -177,25 +177,33 @@ function RegisterPage() {
                 </div>
               </div>
 
-              <div className="sm:col-span-3 w-[100%] flex justify-between gap-9">
-                <div className="flex items-center justify-center md:justify-start gap-3">
+              <div className=" col-span-6  flex flex-col md:flex-row justify-between gap-9 items-center">
+                <div className="flex md:flex-col items-center justify-center md:justify-start gap-4 md:gap-0">
                   <label
                     htmlFor="role"
                     className="block text-sm/6 font-medium text-gray-100"
                   >
-                    Register as a : 
+                    Register as 
                   </label>
                   <div className="mt-2 grid grid-cols-1">
                     <select
                       id="role"
                       name="role"
                       autoComplete="role-name"
-                      className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-gray-700 text-white py-1.5 pr-8 pl-3 text-base text-gray-900  focus:-outline-offset-2 sm:text-sm/6"
+                      className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white text-black py-1.5 pr-8 pl-3 text-base text-gray-900  focus:-outline-offset-2 sm:text-sm/6"
                     >
                       <option> buyer</option>
                       <option> seller </option>
                     </select>
                   </div>
+                </div>
+                <div className="flex flex-col md:items-left text-gray-300 justify-center md:justify-start gap-3 col-span-6 md:col-span-3 text-xs">
+                  <p>
+                    - If you register as a seller, you can sell products but cannot bid. <br />
+                  </p>
+                  <p>
+                  - If you register as a buyer, you can bid on products but cannot sell.
+                  </p>
                 </div>
               </div>
             </div>
@@ -218,7 +226,7 @@ function RegisterPage() {
 
           <p className="text-gray-200 py-2 text-center md:text-left">
             Alrady have an account..!{" "}
-            <a href="/login" className="text-blue-400">
+            <a href="/login" className="text-blue-900">
               Login now
             </a>
           </p>

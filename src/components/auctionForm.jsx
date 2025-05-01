@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { getSession } from 'next-auth/react';
 import axios from 'axios';
+import { useRouter } from 'next/navigation';
 
 export default function AuctionForm() {
   const [title, setTitle] = useState("");
@@ -9,6 +10,8 @@ export default function AuctionForm() {
   const [startingBid, setStartingBid] = useState("");
   const [endTime, setEndTime] = useState("");
   const [image, setImage] = useState(null);
+
+  const router = useRouter(); 
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -34,15 +37,18 @@ export default function AuctionForm() {
       formData.append("image", image);
     }
   
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auctions`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}api/auctions`, {
       method: 'POST',
       body: formData,
-      credentials: 'include' 
+      credentials: 'include',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
     
   
     const data = await res.json();
-    console.log(data);
+    console.log('response', data);
   
     if (res.ok) {
       alert("Auction created!");
@@ -51,6 +57,8 @@ export default function AuctionForm() {
       setStartingBid("");
       setEndTime("");
       setImage(null);
+
+      router.push('/'); 
     } else {
       alert("Failed to create new auction");
     }

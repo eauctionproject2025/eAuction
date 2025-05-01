@@ -1,6 +1,6 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { loginUser } from "@/app/api/authService"; // Your login API function
+import { loginUser } from "@/app/api/authService";
 
 const handler = NextAuth({
   providers: [
@@ -9,34 +9,32 @@ const handler = NextAuth({
       credentials: {
         email: { label: "Email", type: "text" },
         password: { label: "Password", type: "password" },
-        role: { label: "Role", type: "text" }
+        role: { label: "Role", type: "text" },
       },
       async authorize(credentials) {
         try {
           const response = await loginUser({
             email: credentials.email,
             password: credentials.password,
-            role: credentials.role, 
+            role: credentials.role,
           });
-      
+
           if (response?.error) {
-            throw new Error( "Login failed in authorization");
+            throw new Error("Login failed in authorization");
           }
-            // console.log("user from authorization", response.user)
           return {
             id: response.user.id,
             name: response.user.name,
             email: response.user.email,
-            role: response.user.role, // Pass the role
-            // accessToken: response.accessToken,
+            role: response.user.role,
+            accessToken: response.accessToken,
           };
         } catch (error) {
-          console.error("Authorization Error:", error.data, "Login failed in authorization 2");
+          console.error("Authorization Error:", error);
           return null;
         }
       },
-      
-    })
+    }),
   ],
   callbacks: {
     async jwt({ token, user }) {
@@ -50,17 +48,20 @@ const handler = NextAuth({
       if (token) {
         session.user = { ...session.user, role: token.role };
         session.token = token.accessToken;
-        // console.log(session)
       }
       return session;
-    }
+    },
+  },
+  session: {
+    strategy: "jwt",
+  },
+  jwt: {
+    encryption: false, // Disable encryption to use signed JWT
   },
   pages: {
     signIn: "/login",
   },
   secret: process.env.NEXTAUTH_SECRET,
 });
-// console.log("NEXTAUTH_URL:", process.env.NEXTAUTH_URL);
-// console.log("NEXTAUTH_SECRET:", process.env.NEXTAUTH_SECRET ? "Loaded" : "Not Loaded");
 
 export { handler as GET, handler as POST };
