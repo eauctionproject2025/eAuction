@@ -1,22 +1,10 @@
 "use client"
 import Image from "next/image";
-import Link from "next/link";
-import {useRole} from "@/hooks/useRole";
 import Auction from "@/components/auction";
-import car from "@/public/item/car1.jpg";
-import watch from "@/public/item/watch.jpg";
-import samsung from "@/public/item/samsung.jpeg";
-import bat from "@/public/item/bat.jpeg";
-import house from "@/public/item/house.jpeg";
-import bike from "@/public/item/bike.jpeg";
-import painting from "@/public/item/painting.jpeg";
 import searchIcon from "@/public/icon/search.svg";
-import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 
 export default function Home() {
-
-  const { data: session } = useSession();
   
   const [auctions, setAuctions] = useState([]);
 

@@ -4,11 +4,9 @@ import Link from 'next/link'
 import { loginUser } from '@/app/api/authService'
 import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
-import {useRole} from "@/hooks/useRole";
 
 function page() {
   const router = useRouter();   //to redirect the page
-  const userRole = useRole();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -21,7 +19,7 @@ function page() {
         redirect: false, // Prevent automatic redirection
         email,
         password,
-        role
+        role,
       });
   
       if (result?.error) {

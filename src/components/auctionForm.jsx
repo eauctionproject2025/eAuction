@@ -24,9 +24,7 @@ export default function AuctionForm() {
     e.preventDefault();
     
     const session = await getSession();
-    console.log("Session ::", session);
     const token = session?.token;
-    console.log("Token ::", token);
     
     const formData = new FormData();
     formData.append("title", title);

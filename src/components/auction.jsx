@@ -11,14 +11,15 @@ function Auction({ id, imgLink, href, title, price, seller, onDelete }) {
   const handleDelete = async () => {
     if (!confirm("Are you sure you want to delete this auction?")) return;
     try {
-      const res = await fetch(`/api/auctions/${id}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}api/auctions/${id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${session?.token}`,
         },
         credentials: "include",
       });
-      if (!res.ok) throw new Error("Failed to delete auction");
+      if (!res.ok) throw new Error("Failed to delete auction", res);
       if (onDelete) onDelete(id);
       alert("Auction deleted successfully");
     } catch (error) {
@@ -45,19 +46,21 @@ function Auction({ id, imgLink, href, title, price, seller, onDelete }) {
       <div className="p-4 flex flex-col items-center gap-2">
         <div className="text-xl font-semibold">{title}</div>
         {session && <div className="text-lg">Current Bid: {price} ৳ </div>}
-        <Link href={href}>
-          <button className="bg-[#3dd477] hover:bg-[#34c06a] transition px-4 py-2 rounded-md shadow-sm">
-            Bid
-          </button>
-        </Link>
-        {isOwner && (
-          <button
-            onClick={handleDelete}
-            className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md mt-2"
-          >
-            Delete
-          </button>
-        )}
+        <div className="flex gap-2 items-center">
+          <Link href={`/items/${id}`}>
+            <button className="bg-[#3dd477] hover:bg-green-500 transition px-4 py-2 rounded-md shadow-sm">
+              Bid
+            </button>
+          </Link>
+          {isOwner && (
+            <button
+              onClick={handleDelete}
+              className="bg-red-500 hover:bg-red-600 text-white  transition px-4 py-2 rounded-md shadow-sm"
+            >
+              Delete
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );

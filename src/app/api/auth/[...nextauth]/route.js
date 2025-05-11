@@ -17,7 +17,9 @@ const handler = NextAuth({
             email: credentials.email,
             password: credentials.password,
             role: credentials.role,
+            id: credentials.id,
           });
+          console.log("Response from loginUser:", response);
 
           if (response?.error) {
             throw new Error("Login failed in authorization");
@@ -41,12 +43,13 @@ const handler = NextAuth({
       if (user) {
         token.role = user.role;
         token.accessToken = user.accessToken;
+        token.id = user.id;
       }
       return token;
     },
     async session({ session, token }) {
       if (token) {
-        session.user = { ...session.user, role: token.role };
+        session.user = { ...session.user, role: token.role, id: token.id };
         session.token = token.accessToken;
       }
       return session;

@@ -23,7 +23,7 @@ function RegisterPage() {
       nid: nid,
       role: role,
       password: password,
-      username: e.target["first-name"].value + e.target["last-name"].value,
+      username: e.target["first-name"].value + ' ' + e.target["last-name"].value,
     };
 
     // check if all fields are filled
