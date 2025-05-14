@@ -2,8 +2,9 @@ import Image from "next/image";
 import React from "react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
+import CountdownTimer from "@/components/CountdownTimer";
 
-function Auction({ id, imgLink, href, title, price, seller, onDelete }) {
+function Auction({ id, imgLink, href, title, price, startTime, endTime, seller, onDelete }) {
   const { data: session } = useSession();
   const currentUserId = session?.user?.id;
   const isOwner = currentUserId === seller;
@@ -46,6 +47,7 @@ function Auction({ id, imgLink, href, title, price, seller, onDelete }) {
       <div className="p-4 flex flex-col items-center gap-2">
         <div className="text-xl font-semibold">{title}</div>
         {session && <div className="text-lg">Current Bid: {price} ৳ </div>}
+        <CountdownTimer startTime={startTime} endTime={endTime} />
         <div className="flex gap-2 items-center">
           <Link href={`/items/${id}`}>
             <button className="bg-[#3dd477] hover:bg-green-500 transition px-4 py-2 rounded-md shadow-sm">

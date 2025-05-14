@@ -43,6 +43,8 @@ export default function Home() {
           title={auction.title}
           price={auction.startingBid}
           href="#"
+          startTime={auction.startTime}
+          endTime={auction.endTime}
           imgLink={auction.imageUrl}
           seller={auction.seller}
           onDelete={handleDelete}

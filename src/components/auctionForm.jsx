@@ -8,6 +8,7 @@ export default function AuctionForm() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [startingBid, setStartingBid] = useState("");
+  const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
   const [image, setImage] = useState(null);
 
@@ -30,6 +31,7 @@ export default function AuctionForm() {
     formData.append("title", title);
     formData.append("description", description);
     formData.append("startingBid", Number(startingBid));
+    formData.append("startTime", startTime);
     formData.append("endTime", endTime);
     if (image) {
       formData.append("image", image);
@@ -104,7 +106,20 @@ export default function AuctionForm() {
           className="outline rounded-sm p-1.5"
         />
       </div>
-      
+
+      <div className="flex flex-col gap-2">
+        <label htmlFor="startTime" className="block text-sm/6 font-medium text-gray-100">
+                  Start Time
+        </label>
+        <input
+          type="datetime-local"
+          value={startTime}
+          onChange={(e) => setStartTime(e.target.value)}
+          required
+          className="outline rounded-sm p-1.5"
+        />
+      </div>
+
       <div className="flex flex-col gap-2">
         <label htmlFor="endTime" className="block text-sm/6 font-medium text-gray-100">
                   End Time

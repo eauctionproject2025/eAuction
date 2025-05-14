@@ -19,7 +19,6 @@ const handler = NextAuth({
             role: credentials.role,
             id: credentials.id,
           });
-          console.log("Response from loginUser:", response);
 
           if (response?.error) {
             throw new Error("Login failed in authorization");
