@@ -31,7 +31,6 @@ const handler = NextAuth({
             accessToken: response.accessToken,
           };
         } catch (error) {
-          console.error("Authorization Error:", error);
           return null;
         }
       },

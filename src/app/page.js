@@ -3,10 +3,25 @@ import Image from "next/image";
 import Auction from "@/components/auction";
 import searchIcon from "@/public/icon/search.svg";
 import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
+import Greet from '@/components/Greet';
+
 
 export default function Home() {
   
   const [auctions, setAuctions] = useState([]);
+  const [greet, setGreet] = useState(false);
+  // const [loading, setLoading] = useState(false);
+
+  const { data: session } = useSession();
+  useEffect(() => {
+    if (session && !sessionStorage.getItem("greeted")) {
+      setGreet(true);
+      sessionStorage.setItem("greeted", "true");
+    }
+  }, [session]);
+  
+
 
   const handleDelete = (deletedId) => {
     setAuctions((prevAuctions) => prevAuctions.filter((auction) => auction._id !== deletedId));
@@ -15,6 +30,7 @@ export default function Home() {
   useEffect(() => {
     const fetchAuctions = async () =>{
     try{
+      // setLoading(true); 
       const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}api/auctions`);
       const data = await response.json();
       setAuctions(data)
@@ -25,8 +41,13 @@ export default function Home() {
   fetchAuctions();
   }, []);
 
+  // if( !auctions) return <div className="w-full flex items-center justify-center">Loading...</div>;
+
   return (
     <div className="w-full flex flex-col items-center justify-center">
+      {greet && (
+        <Greet message= {`Welcome back ${session?.user.name} !`}/>
+      )}
             <div className="w-full flex items-center justify-center py-[20px] gap-1">
               <div className="w-[50%]">
                 <input type="text" className="w-full text-black bg-gray-200 text-[12px] md:text-[15px] lg:text-[17px] p-2 pl-2 rounded-md border-0"/>

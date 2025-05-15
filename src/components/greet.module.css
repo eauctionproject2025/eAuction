@@ -1,0 +1,39 @@
+.success {
+    font-family: system-ui, sans-serif;
+    width: 320px;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    background: #84D65A;
+    border-radius: 8px;
+    box-shadow: 0px 0px 5px -3px #111;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: all 0.4s ease;
+    position: fixed;
+    top: 20px;
+    z-index: 1000;
+  }
+  
+  .icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+  }
+  
+  .title {
+    font-weight: 500;
+    font-size: 14px;
+    color: #393A37;
+  }
+  
+  .show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  .hide {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  

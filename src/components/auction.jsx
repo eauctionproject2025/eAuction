@@ -3,11 +3,16 @@ import React from "react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import CountdownTimer from "@/components/CountdownTimer";
+import CurrencyFormat from "@/components/currencyFormat";
 
 function Auction({ id, imgLink, href, title, price, startTime, endTime, seller, onDelete }) {
   const { data: session } = useSession();
   const currentUserId = session?.user?.id;
   const isOwner = currentUserId === seller;
+
+  const now = new Date();
+  const end = new Date(endTime);
+  const start = new Date(startTime);
 
   const handleDelete = async () => {
     if (!confirm("Are you sure you want to delete this auction?")) return;
@@ -22,7 +27,6 @@ function Auction({ id, imgLink, href, title, price, startTime, endTime, seller, 
       });
       if (!res.ok) throw new Error("Failed to delete auction", res);
       if (onDelete) onDelete(id);
-      alert("Auction deleted successfully");
     } catch (error) {
       console.error(error);
       alert("Error deleting auction");
@@ -46,13 +50,19 @@ function Auction({ id, imgLink, href, title, price, startTime, endTime, seller, 
       {/* Content Section */}
       <div className="p-4 flex flex-col items-center gap-2">
         <div className="text-xl font-semibold">{title}</div>
-        {session && <div className="text-lg">Current Bid: {price} ৳ </div>}
+        {session && <div className="lg:text-lg md:text-md">Current Bid: <CurrencyFormat price = {price}/> ৳ </div>}
         <CountdownTimer startTime={startTime} endTime={endTime} />
         <div className="flex gap-2 items-center">
           <Link href={`/items/${id}`}>
-            <button className="bg-[#3dd477] hover:bg-green-500 transition px-4 py-2 rounded-md shadow-sm">
-              Bid
-            </button>
+            {session?.user.role=== "buyer" && now > start && now < end ? (
+              <button className="bg-blue-600 hover:bg-blue-700 text-white transition px-4 py-2 rounded-md shadow-sm cursor-pointer">
+                Place Bid
+              </button>
+            ) : (
+              <button className="bg-gray-500 hover:bg-gray-600 text-white transition px-4 py-2 rounded-md shadow-sm cursor-pointer" >
+                Place Bid
+              </button>
+            )}
           </Link>
           {isOwner && (
             <button

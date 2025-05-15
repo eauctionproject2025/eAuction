@@ -18,6 +18,10 @@ function Navbar() {
   ]
   const [menuOpen, setMenuOpen] = useState(false);
   const { data: session } = useSession();
+  const handleSignOut = () => {
+      sessionStorage.removeItem("greeted");
+      signOut();
+    };
 
   return (
     <div className="w-[90%] h-[140px] navbar flex bg-base-100 shadow-sm items-center justify-center">
@@ -40,7 +44,7 @@ function Navbar() {
               <div className="navbar-end mx-2 hidden md:block">
               <Link href={"#"}>
                 <button className="bg-orange-500 hover:bg-gray-100 hover:text-[#3dd477] rounded py-1 px-2"
-                  onClick={()=> signOut()}
+                  onClick={handleSignOut}
                 > 
                   Sign out 
                 </button>

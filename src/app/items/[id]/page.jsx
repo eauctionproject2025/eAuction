@@ -6,6 +6,8 @@ import React from "react";
 import { useParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import CountdownTimer from "@/components/CountdownTimer";
+import CurrencyFormat from "@/components/currencyFormat";
+import sell from '@/public/icon/auction.svg'
 
 function Item() {
   const { id } = useParams();
@@ -13,6 +15,7 @@ function Item() {
   const [bidAmount, setBidAmount] = useState("");
   const [loading, setLoading] = useState(false);
   const [now, setNow] = useState(new Date());
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const interval = setInterval(() => setNow(new Date()), 1000);
@@ -20,8 +23,10 @@ function Item() {
   }, []);
 
   const end = new Date(auction?.endTime);
+  const start = new Date(auction?.startTime);
 
   const { data: session } = useSession();
+
   useEffect(() => {
     if (id) {
       axios
@@ -32,8 +37,15 @@ function Item() {
   }, [id]);
 
   const handleBid = async () => {
+    setError("");
+
+    if (bidAmount <= auction.startingBid) {
+      setError("Bid amount must be greater than the Current bid.");
+      return;
+    }
     try {
       setLoading(true);
+
       await axios.post(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}api/auctions/${id}/bid`,
         { amount: bidAmount },
@@ -42,7 +54,7 @@ function Item() {
             Authorization: `Bearer ${session?.token}`,
           },
         }
-      );// reset bid amount
+      ); // reset bid amount
       setBidAmount("");
       // re-fetch auction
       const res = await axios.get(
@@ -51,6 +63,7 @@ function Item() {
       setAuction(res.data);
     } catch (err) {
       console.error(err);
+      setError("Failed to place bid. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -62,19 +75,41 @@ function Item() {
       </div>
     );
   return (
-    <div className="w-[90%] md:w-[70%] grid grid-cols-1 md:grid-cols-2 gap-6 pt-6">
+    <div className="w-[90%] md:w-[80%] lg:w-[70%] grid grid-cols-1 md:grid-cols-2 gap-6 pt-6">
       {/* Left: Auction Info */}
       <div>
         <img src={auction.imageUrl} className="w-full rounded" alt="Auction" />
         <h1 className="text-2xl font-bold mt-4">{auction.title}</h1>
         <p className="text-gray-300 mt-2">{auction.description}</p>
-        <p className="text-lg mt-4">Current Bid: {auction.startingBid} ৳</p>
-        <p className= "mt-2"> Starts at: {new Date(auction.startTime).toLocaleString()}</p>
-        <p className= "mt-2">Ends at: {new Date(auction.endTime).toLocaleString()}</p>
+        <div className="text-lg mt-4">
+          Current Bid: <CurrencyFormat price={auction.startingBid} /> ৳
+        </div>
+        <p className="mt-2">
+          {" "}
+          Starts at: {new Date(auction.startTime).toLocaleString()}
+        </p>
+        <p className="mt-2">
+          Ends at: {new Date(auction.endTime).toLocaleString()}
+        </p>
 
-        <CountdownTimer startTime={auction.startTime} endTime={auction.endTime} />
+        <CountdownTimer
+          startTime={auction.startTime}
+          endTime={auction.endTime}
+        />
+        {now > end && auction?.winner && (
+          <div className="text-green-400 text-lg font-semibold mt-2">
+            <img src={sell.src} className="w-5 h-5 inline-block mr-2" alt="Winner" />
+            Winner : {auction.winner?.username || auction.bids[0]?.bidder?.username}
+          </div>
+        )}
 
-        {session?.user.role === "buyer" && now < end && (
+        {now > end && !auction?.winner && (
+          <div className="text-red-600 font-semibold mt-2">
+            No bids were placed.
+          </div>
+        )}
+
+        {session?.user.role === "buyer" && now > start && now < end && (
           <div className="mt-4">
             <input
               type="number"
@@ -90,6 +125,7 @@ function Item() {
             >
               {loading ? "Placing..." : "Place Bid"}
             </button>
+            {error && <p className="text-red-300 text-sm mt-2">{error}</p>}
           </div>
         )}
       </div>
@@ -110,13 +146,13 @@ function Item() {
               .slice()
               .reverse()
               .map((bid, index) => (
-                <li key={index} className="border p-2 rounded bg-gray-50">
-                  <p className="text-sm text-gray-900 font-bold">
+                <li key={index} className=" p-2 rounded bg-gray-200">
+                  <p className={`text-sm text-gray-700 font-bold`}>
                     {bid.bidder?.username || "Anonymous"}
                   </p>
-                  <p className="text-sm text-green-400 font-semibold">
-                    Amount: ${bid.amount}
-                  </p>
+                  <div className="text-sm text-green-400 font-semibold">
+                    Amount: <CurrencyFormat price={bid.amount} /> ৳
+                  </div>
                   <p className="text-sm text-gray-500">
                     Time: {new Date(bid.time).toLocaleString()}
                   </p>

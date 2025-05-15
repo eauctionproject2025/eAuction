@@ -4,9 +4,13 @@ import Link from 'next/link'
 import { loginUser } from '@/app/api/authService'
 import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
+import { useState } from 'react';
+import Alert from '@/components/Alert';
 
 function page() {
-  const router = useRouter();   //to redirect the page
+  const router = useRouter();   
+  const [error, setError] = useState(""); 
+  const [showAlert, setShowAlert] = useState(true);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -23,23 +27,32 @@ function page() {
       });
   
       if (result?.error) {
-        alert( "Login Failed");
+        setError('Invalid credentials. Please try again.');
+        e.target.email.value = "";
+        e.target.password.value = ""; 
       } else {
         router.push('/');
       }
     } catch (error) {
-      alert("An unexpected error occurred. Please try again.");
+      setError("An unexpected error occurred. Please try again.");
     }
   };
+  
+  
   
   
   return (
     <div>
         <form onSubmit={handleLogin}>
         <div className="w-[90dvw] md:w-[400px] mt-8 bg-green-100/10 p-4 rounded-md ">
-  
-          <div className="border-b border-gray-900/10">
-            <h2 className="text-base/7 font-semibold text-gray-100"> Login to your account</h2>
+          {error && showAlert && (
+            <Alert
+            msg = {error}
+            onClose={() => setShowAlert(false)}
+          />
+          )}
+          <div className="border-b border-gray-900/10 ">
+            <h2 className="text-base/7 font-semibold text-center text-gray-100"> Login to your account</h2>
   
             <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                <div className="sm:col-span-6">

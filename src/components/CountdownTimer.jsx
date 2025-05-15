@@ -14,11 +14,11 @@ function CountdownTimer({ startTime, endTime }) {
 
   if (now < start) {
     const seconds = Math.floor((start - now) / 1000);
-    return <p className="text-yellow-200 py-1">Auction starts in: {formatTime(seconds)}</p>;
+    return <p className="text-yellow-300 py-1">Auction starts in: {formatTime(seconds)}</p>;
   }
 
   if (now > end) {
-    return <p className="text-red-200 py-1">Auction has ended</p>;
+    return <p className="text-red-700 py-1">Auction has ended</p>;
   }
 
   const secondsLeft = Math.floor((end - now) / 1000);

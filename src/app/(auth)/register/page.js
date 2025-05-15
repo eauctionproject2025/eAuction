@@ -1,57 +1,60 @@
-"use client"
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import { registerUser } from "@/app/api/authService";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 
 function RegisterPage() {
-  const router = useRouter(); // for redirecting the page
+  const router = useRouter();
+  const [errors, setErrors] = useState({});
+  const [successMsg, setSuccessMsg] = useState("");
 
   const handleRegister = async (e) => {
     e.preventDefault();
+    setErrors({});
+    setSuccessMsg("");
 
-    const name = e.target["first-name"].value + " " + e.target["last-name"].value;
+    const firstName = e.target["first-name"].value.trim();
+    const lastName = e.target["last-name"].value.trim();
+    const name = firstName + " " + lastName;
     const email = e.target.email.value.trim();
-    const nid = (e.target.nid.value);
+    const nid = e.target.nid.value.trim();
     const password = e.target.password.value.trim();
     const confirmPassword = e.target.confirmPassword.value.trim();
     const role = e.target.role.value;
 
-    // store all the data in formData
     const formData = {
-      name: name,
-      email: email,
-      nid: nid,
-      role: role,
-      password: password,
-      username: e.target["first-name"].value + ' ' + e.target["last-name"].value,
+      name,
+      email,
+      nid,
+      role,
+      password,
+      username: name,
     };
 
-    // check if all fields are filled
-    if (!name || !email || !nid || !password || !role) {
-      alert("All fields must be filled");
+    const newErrors = {};
+    if (!firstName) newErrors.firstName = "First name is required";
+    if (!lastName) newErrors.lastName = "Last name is required";
+    if (!email) newErrors.email = "Email is required";
+    if (!nid) newErrors.nid = "NID is required";
+    else if (nid.length !== 10) newErrors.nid = "NID must be exactly 10 digits";
+    if (!password) newErrors.password = "Password is required";
+    else if (password.length < 6) newErrors.password = "Password must be at least 6 characters";
+    if (!confirmPassword) newErrors.confirmPassword = "Please confirm your password";
+    else if (password !== confirmPassword) newErrors.confirmPassword = "Passwords do not match";
+
+    if (!role) newErrors.role = "Please select a role";
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
       return;
     }
-    if (nid.length !== 10) {
-      alert("NID number must be 10 digit");
-      console.log(typeof(nid));
-      return;
-    }
-    // make sure password is at least 6 characters
-    if (password.length < 6) {
-      alert("Password must be at least 6 characters");
-      return;
-    }
-    // match both passwords
-    if (password !== confirmPassword) {
-      alert("Password does not match");
-      return;
-    }
+
     try {
-      const response = await registerUser(formData); // register function from authService
-      alert(response.msg || "Registration successful! please login");
-      router.push('/login');
+      const response = await registerUser(formData);
+      setSuccessMsg(response.msg || "Registration successful! Please login.");
+      router.push("/login");
     } catch (error) {
-      alert(error.data?.msg || 'Register Failed, not able to connect to server');
+      setErrors({ global: error.data?.msg || "Register Failed. Unable to connect to server." });
     }
   };
 
@@ -63,172 +66,99 @@ function RegisterPage() {
             <h2 className="text-base/7 font-semibold text-gray-100 text-xl">
               Create an account
             </h2>
+            {errors.global && <p className="text-red-400 text-sm mt-2">{errors.global}</p>}
+            {successMsg && <p className="text-green-400 text-sm mt-2">{successMsg}</p>}
 
             <div className="w-full mt-10 grid grid-cols-1 gap-x-6 gap-y-7 sm:grid-cols-6">
+              {/* First Name */}
               <div className="col-span-6 md:col-span-3">
-                <label
-                  htmlFor="first-name"
-                  className="block text-sm/6 font-medium text-gray-100"
-                >
-                  First name
-                </label>
-                <div className="mt-2">
-                  <input
-                    id="first-name"
-                    name="first-name"
-                    type="text"
-                    required
-                    autoComplete="given-name"
-                    className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                  />
-                </div>
+                <label htmlFor="first-name" className="block text-sm font-medium text-gray-100">First name</label>
+                <input id="first-name" name="first-name" type="text" required autoComplete="given-name"
+                  className="mt-2 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 outline-gray-300 focus:outline-2 focus:outline-indigo-600"
+                />
+                {errors.firstName && <p className="text-red-500 text-xs mt-1">{errors.firstName}</p>}
               </div>
 
+              {/* Last Name */}
               <div className="col-span-6 md:col-span-3">
-                <label
-                  htmlFor="last-name"
-                  className="block text-sm/6 font-medium text-gray-100"
-                >
-                  Last name
-                </label>
-                <div className="mt-2">
-                  <input
-                    id="last-name"
-                    name="last-name"
-                    type="text"
-                    required
-                    autoComplete="family-name"
-                    className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                  />
-                </div>
+                <label htmlFor="last-name" className="block text-sm font-medium text-gray-100">Last name</label>
+                <input id="last-name" name="last-name" type="text" required autoComplete="family-name"
+                  className="mt-2 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 outline-gray-300 focus:outline-2 focus:outline-indigo-600"
+                />
+                {errors.lastName && <p className="text-red-500 text-xs mt-1">{errors.lastName}</p>}
               </div>
 
+              {/* Email */}
               <div className="col-span-6">
-                <label
-                  htmlFor="email"
-                  className="block text-sm/6 font-medium text-gray-100"
-                >
-                  Email address
-                </label>
-                <div className="mt-2">
-                  <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    required
-                    autoComplete="email"
-                    className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                  />
-                </div>
+                <label htmlFor="email" className="block text-sm font-medium text-gray-100">Email address</label>
+                <input id="email" name="email" type="email" required autoComplete="email"
+                  className="mt-2 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 outline-gray-300 focus:outline-2 focus:outline-indigo-600"
+                />
+                {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
               </div>
 
+              {/* NID */}
               <div className="col-span-6">
-                <label
-                  htmlFor="nid"
-                  className="block text-sm/6 font-medium text-gray-100"
-                >
-                  NID Number
-                </label>
-                <div className="mt-2">
-                  <input
-                    id="nid"
-                    name="nid"
-                    type="number"
-                    required
-                    autoComplete="nid"
-                    className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                  />
-                </div>
-              </div>
-              <div className="col-span-6 md:col-span-3">
-                <label
-                  htmlFor="password"
-                  className="block text-sm/6 font-medium text-gray-100"
-                >
-                  Enter new Password
-                </label>
-                <div className="mt-2">
-                  <input
-                    id="password"
-                    name="password"
-                    type="text"
-                    required
-                    autoComplete="password"
-                    className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                  />
-                </div>
-              </div>
-              <div className="col-span-6 md:col-span-3">
-                <label
-                  htmlFor="confirmPassword"
-                  className="block text-sm/6 font-medium text-gray-100"
-                >
-                  Confirm Password
-                </label>
-                <div className="mt-2">
-                  <input
-                    id="confirmPassword"
-                    name="confirmPassword"
-                    type="text"
-                    required
-                    autoComplete="confirmPassword"
-                    className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                  />
-                </div>
+                <label htmlFor="nid" className="block text-sm font-medium text-gray-100">NID Number</label>
+                <input id="nid" name="nid" type="number" required autoComplete="nid"
+                  className="mt-2 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 outline-gray-300 focus:outline-2 focus:outline-indigo-600"
+                />
+                {errors.nid && <p className="text-red-500 text-xs mt-1">{errors.nid}</p>}
               </div>
 
-              <div className=" col-span-6  flex flex-col md:flex-row justify-between gap-9 items-center">
-                <div className="flex md:flex-col items-center justify-center md:justify-start gap-4 md:gap-0">
-                  <label
-                    htmlFor="role"
-                    className="block text-sm/6 font-medium text-gray-100"
+              {/* Password */}
+              <div className="col-span-6 md:col-span-3">
+                <label htmlFor="password" className="block text-sm font-medium text-gray-100">Enter new Password</label>
+                <input id="password" name="password" type="password" required autoComplete="new-password"
+                  className="mt-2 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 outline-gray-300 focus:outline-2 focus:outline-indigo-600"
+                />
+                {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
+              </div>
+
+              {/* Confirm Password */}
+              <div className="col-span-6 md:col-span-3">
+                <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-100">Confirm Password</label>
+                <input id="confirmPassword" name="confirmPassword" type="password" required autoComplete="new-password"
+                  className="mt-2 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 outline-gray-300 focus:outline-2 focus:outline-indigo-600"
+                />
+                {errors.confirmPassword && <p className="text-red-500 text-xs mt-1">{errors.confirmPassword}</p>}
+              </div>
+
+              {/* Role Selection */}
+              <div className="col-span-6 flex flex-col md:flex-row justify-between gap-9 items-center">
+                <div className="flex md:flex-col items-start justify-center md:justify-start gap-4 md:gap-0">
+                  <label htmlFor="role" className="block text-sm font-medium text-gray-100">Register as</label>
+                  <select id="role" name="role"
+                    className="mt-2 w-full rounded-md bg-white text-black py-1.5 px-1 text-base outline outline-1 outline-gray-300 focus:outline-2 focus:outline-indigo-600"
                   >
-                    Register as 
-                  </label>
-                  <div className="mt-2 grid grid-cols-1">
-                    <select
-                      id="role"
-                      name="role"
-                      autoComplete="role-name"
-                      className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white text-black py-1.5 pr-8 pl-3 text-base text-gray-900  focus:-outline-offset-2 sm:text-sm/6"
-                    >
-                      <option> buyer</option>
-                      <option> seller </option>
-                    </select>
-                  </div>
+                    <option value="">Select Role</option>
+                    <option value="buyer">Buyer</option>
+                    <option value="seller">Seller</option>
+                  </select>
+                  {errors.role && <p className="text-red-500 text-xs mt-1">{errors.role}</p>}
                 </div>
+
                 <div className="flex flex-col md:items-left text-gray-300 justify-center md:justify-start gap-3 col-span-6 md:col-span-3 text-xs">
-                  <p>
-                    - If you register as a seller, you can sell products but cannot bid. <br />
-                  </p>
-                  <p>
-                  - If you register as a buyer, you can bid on products but cannot sell.
-                  </p>
+                  <p>- If you register as a seller, you can sell products but cannot bid.</p>
+                  <p>- If you register as a buyer, you can bid on products but cannot sell.</p>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="mt-6 flex items-center  justify-center md:justify-end gap-x-6">
-            <button
-              type="button"
-              className="text-sm/6 font-semibold text-gray-200"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className="rounded-md bg-[#3dd477] px-3 py-2 text-sm font-semibold text-black shadow-xs hover:bg-green-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          {/* Submit Buttons */}
+          <div className="mt-6 flex items-center justify-center md:justify-end gap-x-6">
+            <button type="button" className="text-sm font-semibold text-gray-200">Cancel</button>
+            <button type="submit"
+              className="rounded-md bg-[#3dd477] px-3 py-2 text-sm font-semibold text-black hover:bg-green-500 focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-indigo-600"
             >
               Register
             </button>
           </div>
 
           <p className="text-gray-200 py-2 text-center md:text-left">
-            Alrady have an account..!{" "}
-            <a href="/login" className="text-blue-900">
-              Login now
-            </a>
+            Already have an account?{" "}
+            <a href="/login" className="text-blue-500 underline">Login now</a>
           </p>
         </div>
       </form>
