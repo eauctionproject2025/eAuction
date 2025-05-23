@@ -56,7 +56,7 @@ export default function Home() {
                 <Image src={searchIcon} alt="search icon" className="w-[20px] md:w-[25px] cursor-pointer"/>
               </div>
             </div>
-        <div className="w-[90%] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4  gap-5">
+        <div className="w-[90%] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 items-center justify-items-center">
         {auctions.map((auction) => (
         <Auction
           key={auction._id}

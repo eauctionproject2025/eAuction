@@ -34,7 +34,7 @@ function Auction({ id, imgLink, href, title, price, startTime, endTime, seller, 
   };
 
   return (
-    <div className="bg-green-100/50 text-black shadow-lg rounded-md overflow-hidden w-full max-w-xs">
+    <div className="bg-gray-100/10 text-black shadow-md shadow-gray-800 rounded-md overflow-hidden w-full max-w-xs">
       {/* Image Wrapper */}
       <div className="relative w-full h-48">
         <Image
@@ -49,8 +49,8 @@ function Auction({ id, imgLink, href, title, price, startTime, endTime, seller, 
 
       {/* Content Section */}
       <div className="p-4 flex flex-col items-center gap-2">
-        <div className="text-xl font-semibold">{title}</div>
-        {session && <div className="lg:text-lg md:text-md">Current Bid: <CurrencyFormat price = {price}/> ৳ </div>}
+        <div className="text-xl font-semibold  text-white">{title}</div>
+        {session && <div className="lg:text-lg md:text-md  text-white">Current Bid: <CurrencyFormat price = {price}/> ৳ </div>}
         <CountdownTimer startTime={startTime} endTime={endTime} />
         <div className="flex gap-2 items-center">
           <Link href={`/items/${id}`}>

@@ -24,7 +24,7 @@ function Item() {
 
   const end = new Date(auction?.endTime);
   const start = new Date(auction?.startTime);
-
+  const bids = auction?.bids
   const { data: session } = useSession();
 
   useEffect(() => {
@@ -68,6 +68,7 @@ function Item() {
       setLoading(false);
     }
   };
+  // console.log('winner', auction?.winner)
   if (!auction)
     return (
       <div className="flex justify-center items-center h-screen">
@@ -77,7 +78,7 @@ function Item() {
   return (
     <div className="w-[90%] md:w-[80%] lg:w-[70%] grid grid-cols-1 md:grid-cols-2 gap-6 pt-6">
       {/* Left: Auction Info */}
-      <div>
+      <div className="shadow-md shadow-gray-700 p-3 rounded-md">
         <img src={auction.imageUrl} className="w-full rounded" alt="Auction" />
         <h1 className="text-2xl font-bold mt-4">{auction.title}</h1>
         <p className="text-gray-300 mt-2">{auction.description}</p>
@@ -99,7 +100,7 @@ function Item() {
         {now > end && auction?.winner && (
           <div className="text-green-400 text-lg font-semibold mt-2">
             <img src={sell.src} className="w-5 h-5 inline-block mr-2" alt="Winner" />
-            Winner : {auction.winner?.username || auction.bids[0]?.bidder?.username}
+            Winner : {auction.winner?.username || "Unknown"}
           </div>
         )}
 
@@ -134,9 +135,9 @@ function Item() {
       <div className="flex flex-col gap-9 p-4">
         <div className="mb-4 border-b border-gray-300 pb-2">
           <h2 className="text-xl font-semibold">Seller</h2>
-          <p className="text-gray-300">
+          <a className="text-gray-300" href={`/profile/${auction.seller?._id}`}>
             {auction.seller?.username || "Unknown"}
-          </p>
+          </a>
         </div>
 
         <div>
