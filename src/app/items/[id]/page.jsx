@@ -148,9 +148,9 @@ function Item() {
               .reverse()
               .map((bid, index) => (
                 <li key={index} className=" p-2 rounded bg-gray-200">
-                  <p className={`text-sm text-gray-700 font-bold`}>
+                  <a className={`text-sm text-gray-700 font-bold`} href={`/profile/${bid.bidder?._id}`}>
                     {bid.bidder?.username || "Anonymous"}
-                  </p>
+                  </a>
                   <div className="text-sm text-green-400 font-semibold">
                     Amount: <CurrencyFormat price={bid.amount} /> ৳
                   </div>

@@ -5,15 +5,17 @@ import searchIcon from "@/public/icon/search.svg";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import Greet from '@/components/Greet';
+import Skeleton from "@/components/Skeleton";
 
 
 export default function Home() {
   
   const [auctions, setAuctions] = useState([]);
   const [greet, setGreet] = useState(false);
-  // const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const { data: session } = useSession();
+
   useEffect(() => {
     if (session && !sessionStorage.getItem("greeted")) {
       setGreet(true);
@@ -34,14 +36,13 @@ export default function Home() {
       const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}api/auctions`);
       const data = await response.json();
       setAuctions(data)
+      setLoading(false);
     }catch (error) {
     console.error("Error fetching auctions:", error);
     }
   }
   fetchAuctions();
   }, []);
-
-  // if( !auctions) return <div className="w-full flex items-center justify-center">Loading...</div>;
 
   return (
     <div className="w-full flex flex-col items-center justify-center">
@@ -56,8 +57,12 @@ export default function Home() {
                 <Image src={searchIcon} alt="search icon" className="w-[20px] md:w-[25px] cursor-pointer"/>
               </div>
             </div>
-        <div className="w-[90%] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 items-center justify-items-center">
-        {auctions.map((auction) => (
+        <div className="w-full flex items-center justify-center ">
+        {loading ? (
+          <Skeleton />
+        ) : (
+          <div className="w-[90%] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 items-center justify-items-center">
+          {auctions.map((auction) => (
         <Auction
           key={auction._id}
           id={auction._id}
@@ -69,9 +74,10 @@ export default function Home() {
           imgLink={auction.imageUrl}
           seller={auction.seller}
           onDelete={handleDelete}
-  />
-))}
-
+        />
+        ))}
+        </div>
+      )}
         </div>
         
     </div>
