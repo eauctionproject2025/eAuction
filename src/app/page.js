@@ -5,7 +5,7 @@ import searchIcon from "@/public/icon/search.svg";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import Greet from '@/components/Greet';
-import Skeleton from "@/components/Skeleton";
+import Skeleton from "@/components/homeSkeleton";
 
 
 export default function Home() {
@@ -61,7 +61,7 @@ export default function Home() {
         {loading ? (
           <Skeleton />
         ) : (
-          <div className="w-[90%] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 items-center justify-items-center">
+          <div className="w-[90%] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 items-center justify-items-center">
           {auctions.map((auction) => (
         <Auction
           key={auction._id}

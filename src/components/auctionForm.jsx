@@ -48,7 +48,6 @@ export default function AuctionForm() {
     
   
     const data = await res.json();
-    console.log('response', data);
   
     if (res.ok) {
       alert("Auction created!");

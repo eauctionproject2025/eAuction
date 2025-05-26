@@ -22,7 +22,6 @@ function Navbar() {
   const { data: session } = useSession();
   const id = session?.user?.id;
   const userId = id;
-  console.log('userId', userId);
 
   const handleSignOut = () => {
     sessionStorage.removeItem("greeted");
@@ -32,7 +31,7 @@ function Navbar() {
   return (
     <div className="w-full shadow-sm bg-base-100">
       <nav className="max-w-screen-xl mx-auto px-4 py-2 md:h-18 lg:h-25 flex justify-between items-center">
-        <Link href="/" className="text-2xl font-semibold">e-NILAAM</Link>
+        <Link href="/" className="text-2xl font-semibold">e-Nilam</Link>
 
         {/* Desktop Menu */}
         <ul className="hidden md:flex space-x-6 items-center">

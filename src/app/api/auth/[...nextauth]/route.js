@@ -28,6 +28,7 @@ const handler = NextAuth({
             name: response.user.name,
             email: response.user.email,
             role: response.user.role,
+            image: response.user.image, 
             accessToken: response.accessToken,
           };
         } catch (error) {
@@ -42,12 +43,13 @@ const handler = NextAuth({
         token.role = user.role;
         token.accessToken = user.accessToken;
         token.id = user.id;
+        token.image = user.image; 
       }
       return token;
     },
     async session({ session, token }) {
       if (token) {
-        session.user = { ...session.user, role: token.role, id: token.id };
+        session.user = { ...session.user, role: token.role, id: token.id, image: token.image };    
         session.token = token.accessToken;
       }
       return session;

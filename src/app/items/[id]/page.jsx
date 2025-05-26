@@ -7,13 +7,14 @@ import { useParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import CountdownTimer from "@/components/CountdownTimer";
 import CurrencyFormat from "@/components/currencyFormat";
+import ItemSkeleton from "@/components/itemSkeleton"; 
 import sell from '@/public/icon/auction.svg'
 
 function Item() {
   const { id } = useParams();
   const [auction, setAuction] = useState(null);
   const [bidAmount, setBidAmount] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [now, setNow] = useState(new Date());
   const [error, setError] = useState("");
 
@@ -24,18 +25,23 @@ function Item() {
 
   const end = new Date(auction?.endTime);
   const start = new Date(auction?.startTime);
-  const bids = auction?.bids
   const { data: session } = useSession();
 
   useEffect(() => {
     if (id) {
       axios
-        .get(`${process.env.NEXT_PUBLIC_BACKEND_URL}api/auctions/${id}`)
-        .then((res) => setAuction(res.data))
-        .catch((err) => console.log(err));
+      .get(`${process.env.NEXT_PUBLIC_BACKEND_URL}api/auctions/${id}`)
+      .then((res) => {
+        setAuction(res.data);
+        setLoading(false); 
+      })
+      .catch((err) => {
+        console.log(err);
+        setLoading(false); 
+      });
+
     }
   }, [id]);
-
   const handleBid = async () => {
     setError("");
 
@@ -44,8 +50,6 @@ function Item() {
       return;
     }
     try {
-      setLoading(true);
-
       await axios.post(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}api/auctions/${id}/bid`,
         { amount: bidAmount },
@@ -64,19 +68,15 @@ function Item() {
     } catch (err) {
       console.error(err);
       setError("Failed to place bid. Please try again.");
-    } finally {
-      setLoading(false);
     }
   };
-  // console.log('winner', auction?.winner)
-  if (!auction)
-    return (
-      <div className="flex justify-center items-center h-screen">
-        Loading...
-      </div>
-    );
+
   return (
-    <div className="w-[90%] md:w-[80%] lg:w-[70%] grid grid-cols-1 md:grid-cols-2 gap-6 pt-6">
+    <div className="w-full min-h-screen flex items-center justify-center">
+    {loading ? (
+      <ItemSkeleton /> 
+    ) : (
+          <div className="w-[90%] lg:w-[80%] lg:w-[70%] grid grid-cols-1 md:grid-cols-2 gap-9 pt-6">
       {/* Left: Auction Info */}
       <div className="shadow-md shadow-gray-700 p-3 rounded-md">
         <img src={auction.imageUrl} className="w-full rounded" alt="Auction" />
@@ -132,10 +132,10 @@ function Item() {
       </div>
 
       {/* Right: Seller & Bidding History */}
-      <div className="flex flex-col gap-9 p-4">
+      <div className="lg:w-[80%] flex flex-col lg:ml-[20%] gap-9 p-4">
         <div className="mb-4 border-b border-gray-300 pb-2">
           <h2 className="text-xl font-semibold">Seller</h2>
-          <a className="text-gray-300" href={`/profile/${auction.seller?._id}`}>
+          <a className="text-blue-300 hover:text-blue-200 font-semibold"  href={`/profile/${auction.seller?._id}`}>
             {auction.seller?.username || "Unknown"}
           </a>
         </div>
@@ -148,7 +148,7 @@ function Item() {
               .reverse()
               .map((bid, index) => (
                 <li key={index} className=" p-2 rounded bg-gray-200">
-                  <a className={`text-sm text-gray-700 font-bold`} href={`/profile/${bid.bidder?._id}`}>
+                  <a className={`text-sm text-gray-700 hover:text-gray-900 font-bold`} href={`/profile/${bid.bidder?._id}`}>
                     {bid.bidder?.username || "Anonymous"}
                   </a>
                   <div className="text-sm text-green-400 font-semibold">
@@ -163,7 +163,10 @@ function Item() {
         </div>
       </div>
     </div>
-  );
+    )
+    }
+  </div>
+  )
 }
 
 export default Item;
