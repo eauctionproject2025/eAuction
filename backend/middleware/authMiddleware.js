@@ -38,6 +38,14 @@ const protect = (req, res, next) => {
   }
 };
 
+// 🛡️ adminOnly: middleware to restrict access to admin users
+const adminOnly = (req, res, next) => {
+  if (req.user && req.user.role === 'admin') {
+    next();
+  } else {
+    res.status(403).json({ message: "Not authorized as admin" });
+  }
+};
 
 // 🛡️ restrictTo: restrict access based on user role
 const restrictTo = (...roles) => {
@@ -49,4 +57,4 @@ const restrictTo = (...roles) => {
   };
 };
 
-module.exports = {authMiddleware, protect, restrictTo};
+module.exports = {authMiddleware, protect, adminOnly, restrictTo};

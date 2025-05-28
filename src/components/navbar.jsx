@@ -31,7 +31,7 @@ function Navbar() {
   return (
     <div className="w-full shadow-sm bg-base-100">
       <nav className="max-w-screen-xl mx-auto px-4 py-2 md:h-18 lg:h-25 flex justify-between items-center">
-        <Link href="/" className="text-2xl font-semibold">e-Nilam</Link>
+        <Link href="/" className="text-2xl font-semibold">BidWise</Link>
 
         {/* Desktop Menu */}
         <ul className="hidden md:flex space-x-6 items-center">

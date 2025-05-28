@@ -30,7 +30,9 @@ function page() {
         setError('Invalid credentials. Please try again.');
         e.target.email.value = "";
         e.target.password.value = ""; 
-      } else {
+      }else if( role === "admin" && result?.ok) {
+        router.push('#'); ///admin/dashboard
+      }else {
         router.push('/');
       }
     } catch (error) {

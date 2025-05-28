@@ -23,11 +23,11 @@ function FooteBox() {
             <div className='w-95% md:w-[25%] h-full flex flex-col space-y-2 md:space-y-6'>
                 <div className=''>
                     <Link href="/" className='cursor-pointer text-2xl'>
-                    e-Nilaam
+                    BidWise
                     </Link>
                 </div>
                 <div className='w-[100%] flex flex-col space-y-3 md:space-y-8'>
-                    <h1> Let's get some awesome Items from eNilaam </h1>
+                    <h1> Let's get some awesome Items from BidWise </h1>
                 </div>
             </div>
             <div className='w-95% md:w-[25%] h-full flex md:flex-col items-center gap-5 md:gap-0 md:my-0'>
