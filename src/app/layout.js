@@ -1,5 +1,6 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import LayoutShell from "@/components/LayoutShell";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import SessionProviderWrapper from "@/components/SessionProviderWraper";
@@ -26,13 +27,7 @@ export default function RootLayout({ children, session }) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col items-center`}
       >
         <SessionProviderWrapper session={session}>
-        <div className=" w-full flex items-center justify-center border-b-1 border-[#00000033]">
-        <Navbar/>
-        </div>
-        {children}
-        <div className="w-full flex items-center justify-center">
-          <Footer/>
-        </div>
+          <LayoutShell>{children}</LayoutShell>
         </SessionProviderWrapper>
       </body>
     </html>

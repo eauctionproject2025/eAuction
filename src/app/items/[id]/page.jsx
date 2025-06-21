@@ -9,6 +9,7 @@ import CountdownTimer from "@/components/CountdownTimer";
 import CurrencyFormat from "@/components/currencyFormat";
 import ItemSkeleton from "@/components/itemSkeleton"; 
 import sell from '@/public/icon/auction.svg'
+import winner from '@/public/icon/ended.svg'
 
 function Item() {
   const { id } = useParams();
@@ -17,6 +18,17 @@ function Item() {
   const [loading, setLoading] = useState(true);
   const [now, setNow] = useState(new Date());
   const [error, setError] = useState("");
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+    const nextImage = () => {
+    setCurrentIndex((prev) => (prev + 1) % auction.imageUrls.length);
+  };
+
+  const prevImage = () => {
+    setCurrentIndex((prev) =>
+      prev === 0 ? auction.imageUrls.length - 1 : prev - 1
+    );
+  };
 
   useEffect(() => {
     const interval = setInterval(() => setNow(new Date()), 1000);
@@ -72,16 +84,43 @@ function Item() {
   };
 
   return (
-    <div className="w-full min-h-screen flex items-center justify-center">
+    <div className="w-full min-h-screen flex items-center justify-center my-5">
     {loading ? (
       <ItemSkeleton /> 
     ) : (
-          <div className="w-[90%] lg:w-[80%] lg:w-[70%] grid grid-cols-1 md:grid-cols-2 gap-9 pt-6">
+          <div className="w-[90%] lg:w-[80%] lg:w-[70%] grid grid-cols-1 md:grid-cols-2 gap-9">
       {/* Left: Auction Info */}
       <div className="shadow-md shadow-gray-700 p-3 rounded-md">
-        <img src={auction.imageUrl} className="w-full rounded" alt="Auction" />
+              {auction.imageUrls.length > 1 ? (
+                <div className="relative w-full overflow-hidden rounded">
+                  <img
+                    src={auction.imageUrls[currentIndex]}
+                    alt={`auction-${currentIndex}`}
+                    className="w-full rounded"
+                  />
+                  {/* Navigation Buttons */}
+                  <button
+                    onClick={prevImage}
+                    className="absolute cursor-pointer w-6 h-6 font-bold text-xl pb-1.5 flex items-center justify-center left-3 top-1/2 transform -translate-y-1/2 bg-black/50 text-white p-1 rounded-full"
+                  >
+                    ‹
+                  </button>
+                  <button
+                    onClick={nextImage}
+                    className="absolute cursor-pointer w-6 h-6 font-bold text-xl pb-1.5 flex items-center justify-center right-3 top-1/2 transform -translate-y-1/2 bg-black/50 text-white p-1 rounded-full"
+                  >
+                    ›
+                  </button>
+                </div>
+              ) : (
+                <img
+                    src={auction.imageUrls[currentIndex]}
+                    alt={`auction-${currentIndex}`}
+                    className="w-full rounded"
+                  />
+              )}
         <h1 className="text-2xl font-bold mt-4">{auction.title}</h1>
-        <p className="text-gray-300 mt-2">{auction.description}</p>
+        <p className="text-gray-600 mt-2">{auction.description}</p>
         <div className="text-lg mt-4">
           Current Bid: <CurrencyFormat price={auction.startingBid} /> ৳
         </div>
@@ -98,8 +137,8 @@ function Item() {
           endTime={auction.endTime}
         />
         {now > end && auction?.winner && (
-          <div className="text-green-400 text-lg font-semibold mt-2">
-            <img src={sell.src} className="w-5 h-5 inline-block mr-2" alt="Winner" />
+          <div className="text-green-500 text-lg font-semibold mt-2">
+            <img src={winner.src} className="w-7 h-7 inline-block mr-2" alt="Winner" />
             Winner : {auction.winner?.username || "Unknown"}
           </div>
         )}
@@ -135,7 +174,7 @@ function Item() {
       <div className="lg:w-[80%] flex flex-col lg:ml-[20%] gap-9 p-4">
         <div className="mb-4 border-b border-gray-300 pb-2">
           <h2 className="text-xl font-semibold">Seller</h2>
-          <a className="text-blue-300 hover:text-blue-200 font-semibold"  href={`/profile/${auction.seller?._id}`}>
+          <a className="text-blue-500 hover:text-blue-600 font-semibold"  href={`/profile/${auction.seller?._id}`}>
             {auction.seller?.username || "Unknown"}
           </a>
         </div>

@@ -2,9 +2,9 @@
 const express = require('express');
 const router = express.Router();
 
-const { protect, adminOnly } = require('../middleware/authMiddleware'); // or wherever you defined it
+const { protect, isAdmin } = require('../middleware/authMiddleware'); // or wherever you defined it
 const { getAllUsers } = require('../controllers/adminController');
 
-router.get('/users', protect, adminOnly, getAllUsers);
+router.get('/users', protect, isAdmin, getAllUsers);
 
 module.exports = router;

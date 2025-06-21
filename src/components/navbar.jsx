@@ -1,10 +1,11 @@
 "use client";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSession, signOut } from "next-auth/react";
 import { useRouter, useParams } from "next/navigation";
 import Image from "next/image";
 import guest from "@/public/profile/user.svg";
+import search from "@/public/icon/search.svg";
 
 function Navbar() {
   const router = useRouter();
@@ -19,9 +20,28 @@ function Navbar() {
 
   const [menuOpen, setMenuOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [showNavbar, setShowNavbar] = useState(true);
+
   const { data: session } = useSession();
-  const id = session?.user?.id;
-  const userId = id;
+  const userId = session?.user?.id;
+  const role = session?.user?.role;
+
+  useEffect(() => {
+    let lastScrollY = 0;
+
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      if (currentScrollY > lastScrollY && currentScrollY > 50) {
+        setShowNavbar(false);
+      } else {
+        setShowNavbar(true);
+      }
+      lastScrollY = currentScrollY;
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const handleSignOut = () => {
     sessionStorage.removeItem("greeted");
@@ -29,44 +49,95 @@ function Navbar() {
   };
 
   return (
-    <div className="w-full shadow-sm bg-base-100">
-      <nav className="max-w-screen-xl mx-auto px-4 py-2 md:h-18 lg:h-25 flex justify-between items-center">
-        <Link href="/" className="text-2xl font-semibold">BidWise</Link>
+    <div
+      className={`fixed top-0 left-0 w-full z-50 bg-white shadow transition-transform duration-300 ${
+        showNavbar ? "translate-y-0" : "-translate-y-full"
+      }`}
+    >
+      {/* Top Row */}
+      <div className="max-w-screen-xl mx-auto px-4 py-2 flex items-center justify-between gap-2 h-14 md:flex-nowrap flex-row">
+        {/* Logo */}
+        <Link href="/" className="text-2xl font-semibold">
+          BidWise
+        </Link>
 
-        {/* Desktop Menu */}
-        <ul className="hidden md:flex space-x-6 items-center">
-          {menus.map((item) => (
-            <li key={item.id}>
-              <Link
-                href={item.link}
-                className="hover:text-green-500"
-              >
-                {item.name}
-              </Link>
-            </li>
-          ))}
-        </ul>
+        {/* Search Bar (hidden on mobile) */}
+        <div className="flex-grow h-9 md:max-w-lg hidden md:flex items-center border rounded overflow-hidden">
+          <input
+            type="text"
+            placeholder="Search auctions..."
+            className="w-full px-3 py-2 focus:outline-none bg-white"
+          />
+          <div className="bg-yellow-400 w-12 h-full flex items-center justify-center cursor-pointer text-white hover:bg-yellow-500">
+            <Image src={search} alt="Search" className="w-5 h-5" />
+          </div>
+        </div>
 
-        {/* Profile/User Icon */}
-        {session? (
-          <div className="relative">
+        {/* Mobile Toggle */}
+        <div className="flex items-center space-x-4 md:hidden">
           <button
-            onClick={() => setUserMenuOpen(!userMenuOpen)}
-            className="w-8 h-8 rounded-full overflow-hidden border-2 border-gray-300 cursor-pointer hidden md:block"
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="ml-4"
+            aria-label="Toggle menu"
           >
-            <Image
-              src={session?.user?.image || guest}
-              alt="user"
-              width={30}
-              height={30}
-            />
+            {menuOpen ? (
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            ) : (
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              </svg>
+            )}
           </button>
+        </div>
 
-          {/* Dropdown from user icon */}
-          {userMenuOpen && (
-            <div className="absolute right-0 mt-2 w-48 bg-white border rounded shadow-md z-50 p-2">
-              
-                <>
+        {/* Desktop Auth */}
+        <div className="hidden md:flex items-center space-x-4">
+          {role === "admin" ? (
+            <Link
+              href="/admin/dashboard"
+              className="px-4 py-2 bg-gray-600 text-white rounded hover:text-gray-600 hover:bg-yellow-400"
+            >
+              Dashboard
+            </Link>
+          ) : session ? (
+            <div className="relative">
+              <button
+                onClick={() => setUserMenuOpen(!userMenuOpen)}
+                className="w-8 h-8 rounded-full overflow-hidden border-2 border-yellow-500 cursor-pointer"
+              >
+                <Image
+                  src={session?.user?.image || guest}
+                  alt="user"
+                  width={30}
+                  height={30}
+                />
+              </button>
+              {userMenuOpen && (
+                <div className="absolute right-0 mt-2 w-48 bg-white border rounded shadow-md z-50 p-2">
                   <Link
                     href={`/profile/${userId}`}
                     className="block px-4 py-2 hover:bg-gray-100 text-gray-900"
@@ -83,69 +154,46 @@ function Navbar() {
                   >
                     Sign out
                   </button>
-                </>
+                </div>
+              )}
             </div>
-          )}
-        </div>):(
-            <div className="hidden md:flex space-x-4">
-              <button
-            className=" px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-            onClick={() => router.push("/login")}
-          >
-            Sign in
-          </button>
-          <button className=" px-4 py-2 bg-blue-500 text-white rounded hover:bg-green-600"
-            onClick={() => router.push("/register")}
-          >
-            Sign up
-          </button>
-            </div>
-
-        )}
-
-        {/* Mobile Toggle */}
-        <button
-          onClick={() => setMenuOpen(!menuOpen)}
-          className="md:hidden ml-4"
-          aria-label="Toggle menu"
-        >
-          {menuOpen ? (
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
           ) : (
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 6h16M4 12h16M4 18h16"
-              />
-            </svg>
+            <>
+              <button
+                className="px-4 py-2 bg-yellow-500 text-white rounded text-semibold hover:bg-yellow-400 hover:text-gray-700"
+                onClick={() => router.push("/login")}
+              >
+                Sign in
+              </button>
+              <button
+                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 hover:text-gray-900"
+                onClick={() => router.push("/register")}
+              >
+                Sign up
+              </button>
+            </>
           )}
-        </button>
-      </nav>
+        </div>
+      </div>
+
+      {/* Second Sticky Row (Desktop Menu) */}
+      <div className="hidden md:block sticky top-14 bg-gray-700 z-40">
+        <div className="max-w-screen-xl mx-auto px-4 py-2 flex text-white/80 justify-center md:justify-start space-x-6 overflow-x-auto">
+          {menus.map((item) => (
+            <Link
+              key={item.id}
+              href={item.link}
+              className="hover:text-yellow-400 whitespace-nowrap"
+            >
+              {item.name}
+            </Link>
+          ))}
+        </div>
+      </div>
 
       {/* Mobile Menu */}
       {menuOpen && (
-        <div className="md:hidden px-4 pb-4 border-t">
+        <div className="md:hidden px-4 pb-4 border-t bg-white">
           <ul className="flex flex-col space-y-2 mt-2">
             {menus.map((item) => (
               <li key={item.id}>
@@ -159,7 +207,15 @@ function Navbar() {
               </li>
             ))}
             <hr className="my-2" />
-            {session ? (
+            {role === "admin" ? (
+              <Link
+                href="/admin/dashboard"
+                className="block py-2 px-4 hover:bg-gray-100 hover:text-purple-600"
+                onClick={() => setMenuOpen(false)}
+              >
+                Dashboard
+              </Link>
+            ) : session ? (
               <>
                 <Link
                   href={`/profile/${userId}`}
@@ -173,7 +229,7 @@ function Navbar() {
                     handleSignOut();
                     setMenuOpen(false);
                   }}
-                  className="w-full text-left py-2 px-4 text-red-400 hover:bg-gray-100 "
+                  className="w-full text-left py-2 px-4 text-red-400 hover:bg-gray-100"
                 >
                   Sign out
                 </button>

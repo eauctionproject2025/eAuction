@@ -8,7 +8,7 @@ import FooterBox from '@/components/footerBox'
 
 function Footer() {
   return (
-    <div className='w-full flex flex-col justify-between mt-6'>
+    <div className='w-full flex flex-col justify-between'>
         <div className='flex flex-col w-full  bg-[#00000033] py-5 gap-7 items-center justify-center'>
           <div className=''>
             <FooterBox />

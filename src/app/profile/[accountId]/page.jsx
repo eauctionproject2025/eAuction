@@ -91,13 +91,12 @@ export default function ProfilePage() {
       console.error("Update failed", error);
     }
   };
-
   return (
     <>
       {loading ? (
         <ProfileSkeleton />
       ) : (
-        <div className="w-[80%] md:[90%] lg:w-[70%] grid grid-cols-1 md:grid-cols-2 pt-7 gap-4">
+        <div className="w-[80%] md:[90%] lg:w-[70%] grid grid-cols-1 md:grid-cols-2 my-7 gap-4">
           {/* Profile Header */}
           <div className="profile-header flex flex-col gap-3 lg:gap-5 items-start justify-top shadow-md shadow-gray-700 rounded-md p-4">
             <Image

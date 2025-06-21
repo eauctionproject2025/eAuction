@@ -33,19 +33,19 @@ function FooteBox() {
             <div className='w-95% md:w-[25%] h-full flex md:flex-col items-center gap-5 md:gap-0 md:my-0'>
                 <ul className='md:space-y-2'>
                     {links1.map((link =>(
-                        <li key={link.id} className='text-[12px] md:text-[15px] font-light text-[#FFFFFF99] hover:text-white'><Link href={link.link}>{link.label}</Link></li>
+                        <li key={link.id} className='text-[12px] md:text-[15px] font-light text-gray-600 hover:text-gray-800'><Link href={link.link}>{link.label}</Link></li>
                     )))}
                 </ul>
                 <ul className='md:hidden'>
                     {links2.map((link =>(
-                        <li key={link.id} className='text-[12px] font-light text-[#FFFFFF99]'><Link href={link.link}>{link.label}</Link></li>
+                        <li key={link.id} className='text-[12px] font-light text-gray-600 hover:text-gray-800'><Link href={link.link}>{link.label}</Link></li>
                     )))}
                 </ul>
             </div>
             <div className='hidden md:block w-[25%] h-full flex flex-col items-center '>
                 <ul className='space-y-2'>
                     {links2.map((link =>(
-                        <li key={link.id} className='text-[15px] font-light text-[#FFFFFF99] hover:text-[#fff]'><Link href={link.link}>{link.label}</Link></li>
+                        <li key={link.id} className='text-[15px] font-light text-gray-600 hover:text-gray-800'><Link href={link.link}>{link.label}</Link></li>
                     )))}
                     </ul>
             </div>

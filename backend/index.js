@@ -9,6 +9,7 @@ const uploadProfile = require('./routes/uploadProfile');
 const adminRoutes = require('./routes/adminRoutes');
 const cookieParser = require('cookie-parser');
 
+
 const app = express();
 
 const connectDB = require("./config/db");
