@@ -79,7 +79,7 @@ export default function DashboardPage() {
         <SummaryCard label="Active auctions" link="/admin/dashboard/active" value={activeAuctions.length || '0'} icon={active} color="green-500" />
         <SummaryCard label="Auctions ended" link="/admin/dashboard/ended" value={endedAuctions.length || '0'} icon={ended} color="red-500" />
         <SummaryCard label="Pending Auctions" link="/admin/dashboard/pending" value={pendingAuctions.length || '0'} icon={pending} color="blue-500" />
-        <SummaryCard label="Total Auctions" link="/admin/dashboard/#" value={(activeAuctions.length || 0) + (endedAuctions.length || 0) + (pendingAuctions.length || 0)} icon={total} color="gray-500" />
+        <SummaryCard label="Total Auctions" link="/admin/dashboard/#" value={(activeAuctions.length || '0') + (endedAuctions.length || '0') + (pendingAuctions.length || '0')} icon={total} color="gray-500" />
       </div>
 
       <h1 className="text-xl text-gray-600 font-semibold pt-3">User Summary</h1> 
