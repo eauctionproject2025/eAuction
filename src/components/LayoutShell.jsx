@@ -15,7 +15,7 @@ export default function LayoutShell({ children }) {
           <Navbar />
         </div>
       )}
-      <div className={`w-full pt-${isDashboard?'0':'15'} md:pt-${isDashboard? '[0px]':'[100px]'} pb-5 flex items-center justify-center`}>
+      <div className={`w-full pt-${isDashboard?'0':'15'} md:pt-${isDashboard? '[0px]':'[101px]'} pb-5 flex items-center justify-center`}>
         {children}
       </div>
       {!isDashboard && (
