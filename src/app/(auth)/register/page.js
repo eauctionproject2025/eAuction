@@ -63,7 +63,7 @@ function RegisterPage() {
       <form onSubmit={handleRegister}>
         <div className="w-[90dvw] md:w-[550px] mt-8 bg-green-100/10 p-4 text-black rounded-md">
           <div className="border-b border-gray-900/10 flex flex-col justify-center items-center">
-            <h2 className="text-base/7 font-semibold text-gray-100 text-xl">
+            <h2 className="text-base/7 font-semibold text-gray-800 text-xl">
               Create an account
             </h2>
             {errors.global && <p className="text-red-400 text-sm mt-2">{errors.global}</p>}
@@ -72,7 +72,7 @@ function RegisterPage() {
             <div className="w-full mt-10 grid grid-cols-1 gap-x-6 gap-y-7 sm:grid-cols-6">
               {/* First Name */}
               <div className="col-span-6 md:col-span-3">
-                <label htmlFor="first-name" className="block text-sm font-medium text-gray-100">First name</label>
+                <label htmlFor="first-name" className="block text-sm font-medium text-gray-800">First name</label>
                 <input id="first-name" name="first-name" type="text" required autoComplete="given-name"
                   className="mt-2 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 outline-gray-300 focus:outline-2 focus:outline-indigo-600"
                 />
@@ -81,7 +81,7 @@ function RegisterPage() {
 
               {/* Last Name */}
               <div className="col-span-6 md:col-span-3">
-                <label htmlFor="last-name" className="block text-sm font-medium text-gray-100">Last name</label>
+                <label htmlFor="last-name" className="block text-sm font-medium text-gray-800">Last name</label>
                 <input id="last-name" name="last-name" type="text" required autoComplete="family-name"
                   className="mt-2 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 outline-gray-300 focus:outline-2 focus:outline-indigo-600"
                 />
@@ -90,7 +90,7 @@ function RegisterPage() {
 
               {/* Email */}
               <div className="col-span-6">
-                <label htmlFor="email" className="block text-sm font-medium text-gray-100">Email address</label>
+                <label htmlFor="email" className="block text-sm font-medium text-gray-800">Email address</label>
                 <input id="email" name="email" type="email" required autoComplete="email"
                   className="mt-2 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 outline-gray-300 focus:outline-2 focus:outline-indigo-600"
                 />
@@ -99,7 +99,7 @@ function RegisterPage() {
 
               {/* NID */}
               <div className="col-span-6">
-                <label htmlFor="nid" className="block text-sm font-medium text-gray-100">NID Number</label>
+                <label htmlFor="nid" className="block text-sm font-medium text-gray-800">NID Number</label>
                 <input id="nid" name="nid" type="number" required autoComplete="nid"
                   className="mt-2 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 outline-gray-300 focus:outline-2 focus:outline-indigo-600"
                 />
@@ -108,7 +108,7 @@ function RegisterPage() {
 
               {/* Password */}
               <div className="col-span-6 md:col-span-3">
-                <label htmlFor="password" className="block text-sm font-medium text-gray-100">Enter new Password</label>
+                <label htmlFor="password" className="block text-sm font-medium text-gray-800">Enter new Password</label>
                 <input id="password" name="password" type="password" required autoComplete="new-password"
                   className="mt-2 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 outline-gray-300 focus:outline-2 focus:outline-indigo-600"
                 />
@@ -117,7 +117,7 @@ function RegisterPage() {
 
               {/* Confirm Password */}
               <div className="col-span-6 md:col-span-3">
-                <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-100">Confirm Password</label>
+                <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-800">Confirm Password</label>
                 <input id="confirmPassword" name="confirmPassword" type="password" required autoComplete="new-password"
                   className="mt-2 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 outline-gray-300 focus:outline-2 focus:outline-indigo-600"
                 />
@@ -127,7 +127,7 @@ function RegisterPage() {
               {/* Role Selection */}
               <div className="col-span-6 flex flex-col md:flex-row justify-between gap-9 items-center">
                 <div className="flex md:flex-col items-start justify-center md:justify-start gap-4 md:gap-0">
-                  <label htmlFor="role" className="block text-sm font-medium text-gray-100">Register as</label>
+                  <label htmlFor="role" className="block text-sm font-medium text-gray-800">Register as</label>
                   <select id="role" name="role"
                     className="mt-2 w-full rounded-md bg-white text-black py-1.5 px-1 text-base outline outline-1 outline-gray-300 focus:outline-2 focus:outline-indigo-600"
                   >
@@ -138,7 +138,7 @@ function RegisterPage() {
                   {errors.role && <p className="text-red-500 text-xs mt-1">{errors.role}</p>}
                 </div>
 
-                <div className="flex flex-col md:items-left text-gray-300 justify-center md:justify-start gap-3 col-span-6 md:col-span-3 text-xs">
+                <div className="flex flex-col md:items-left text-gray-400 justify-center md:justify-start gap-3 col-span-6 md:col-span-3 text-xs">
                   <p>- If you register as a seller, you can sell products but cannot bid.</p>
                   <p>- If you register as a buyer, you can bid on products but cannot sell.</p>
                 </div>
@@ -148,7 +148,7 @@ function RegisterPage() {
 
           {/* Submit Buttons */}
           <div className="mt-6 flex items-center justify-center md:justify-end gap-x-6">
-            <button type="button" className="text-sm font-semibold text-gray-200">Cancel</button>
+            <button type="button" className="text-sm font-semibold text-red-400">Cancel</button>
             <button type="submit"
               className="rounded-md bg-[#3dd477] px-3 py-2 text-sm font-semibold text-black hover:bg-green-500 focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-indigo-600"
             >
@@ -156,8 +156,8 @@ function RegisterPage() {
             </button>
           </div>
 
-          <p className="text-gray-200 py-2 text-center md:text-left">
-            Already have an account?{" "}
+          <p className="text-gray-400 py-2 text-center md:text-left">
+            Already have an account..! {" "}
             <a href="/login" className="text-blue-500 underline">Login now</a>
           </p>
         </div>

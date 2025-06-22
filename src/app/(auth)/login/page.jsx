@@ -54,11 +54,11 @@ function page() {
           />
           )}
           <div className="border-b border-gray-900/10 ">
-            <h2 className="text-base/7 font-semibold text-center text-gray-100"> Login to your account</h2>
+            <h2 className="text-base/7 font-semibold text-center text-gray-800"> Login to your account</h2>
   
             <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                <div className="sm:col-span-6">
-                <label htmlFor="email" className="block text-sm/6 font-medium text-gray-100">
+                <label htmlFor="email" className="block text-sm/6 font-medium text-gray-800">
                   Email address
                 </label>
                 <div className="mt-2">
@@ -74,7 +74,7 @@ function page() {
               </div>
 
               <div className="sm:col-span-6">
-                <label htmlFor="password" className="block text-sm/6 font-medium text-gray-100">
+                <label htmlFor="password" className="block text-sm/6 font-medium text-gray-800">
                   Enter Password
                 </label>
                 <div className="mt-2">
@@ -91,7 +91,7 @@ function page() {
               
               <div className="sm:col-span-3 w-[100%] flex justify-between gap-9">
                 <div className=" cols-span-3">
-                  <label htmlFor="role" className="block text-sm/6 font-medium text-gray-100">
+                  <label htmlFor="role" className="block text-sm/6 font-medium text-gray-800">
                       Role
                   </label>
                   <div className="mt-2 grid grid-cols-1">
@@ -103,7 +103,6 @@ function page() {
                       >
                       <option> buyer</option>
                       <option> seller </option>
-                      <option> admin </option>
                       </select>
                   </div>
                 </div>
@@ -119,7 +118,7 @@ function page() {
             Login
           </button>
         </div>
-        <p className="text-blue-300 py-2 text-center md:text-left"><Link href={"/register"}>Create an account</Link></p>
+        <p className="text-blue-400 py-2 text-center md:text-left"><Link href={"/register"}>Create an account</Link></p>
 
         </div>
       </form>

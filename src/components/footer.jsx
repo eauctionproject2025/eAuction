@@ -14,7 +14,7 @@ function Footer() {
             <FooterBox />
           </div>
           <div className='flex items-center justify-between w-[80%] h-full'>
-              <div className='text-[10px] md:text-[15px] text-[#FFFFFF99]'>Copyright 2025 BidWise. All Rights Reserved</div>
+              <div className='text-[10px] md:text-[15px] text-gray-500'>Copyright 2025 BidWise. All Rights Reserved</div>
               <div className='flex space-x-1'>
                   <SocialLink link={fb} des='fb icon' href="#"/>
                   <SocialLink link={insta} des='insta icon' href="#"/>
