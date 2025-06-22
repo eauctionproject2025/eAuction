@@ -14,11 +14,10 @@ export default function SkeletonGrid({ count = 8 }) {
       {/* Text skeletons */}
       <div className="relative z-10 h-full flex items-center">
         <div className="ml-10 space-y-4 max-w-xl w-[80%]">
-          <div className="h-3 w-1/3 bg-gray-400 rounded" />
-          <div className="h-6 w-2/3 bg-gray-400 rounded" />
-          <div className="h-5 w-1/2 bg-gray-400 rounded" />
-          <div className="h-4 w-full bg-gray-400 rounded" />
-          <div className="h-8 w-1/4 bg-yellow-400 rounded" />
+          <div className="h-9 w-1/3 bg-gray-400 rounded" />
+          <div className="h-8 w-2/3 bg-gray-400 rounded" />
+          <div className="h-6 w-1/2 bg-gray-400 rounded" />
+          <div className="h-9 w-1/4 bg-yellow-400 rounded" />
         </div>
       </div>
 

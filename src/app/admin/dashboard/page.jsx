@@ -76,17 +76,17 @@ export default function DashboardPage() {
     <div className="flex flex-col gap-4 p-4">
       <h1 className="text-xl text-gray-600 font-semibold pt-3">Auction Summary</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-7">
-        <SummaryCard label="Active auctions" link="/admin/dashboard/active" value={activeAuctions.length} icon={active} color="green-500" />
-        <SummaryCard label="Auctions ended" link="/admin/dashboard/ended" value={endedAuctions.length} icon={ended} color="red-500" />
-        <SummaryCard label="Pending Auctions" link="/admin/dashboard/pending" value={pendingAuctions.length} icon={pending} color="blue-500" />
-        <SummaryCard label="Total Auctions" link="/admin/dashboard/#" value={activeAuctions.length + endedAuctions.length + pendingAuctions.length} icon={total} color="gray-500" />
+        <SummaryCard label="Active auctions" link="/admin/dashboard/active" value={activeAuctions.length || '0'} icon={active} color="green-500" />
+        <SummaryCard label="Auctions ended" link="/admin/dashboard/ended" value={endedAuctions.length || '0'} icon={ended} color="red-500" />
+        <SummaryCard label="Pending Auctions" link="/admin/dashboard/pending" value={pendingAuctions.length || '0'} icon={pending} color="blue-500" />
+        <SummaryCard label="Total Auctions" link="/admin/dashboard/#" value={(activeAuctions.length || 0) + (endedAuctions.length || 0) + (pendingAuctions.length || 0)} icon={total} color="gray-500" />
       </div>
 
-      <h1 className="text-xl text-gray-600 font-semibold pt-3">User Summary</h1>
+      <h1 className="text-xl text-gray-600 font-semibold pt-3">User Summary</h1> 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-7">
-        <SummaryCard label="Total Seller" link="/admin/dashboard/sellers" value={sellers.length} icon={seller} color="green-500" />
-        <SummaryCard label="Total Buyer" link="/admin/dashboard/buyers" value={buyers.length} icon={buyer} color="blue-500" />
-        <SummaryCard label="Blocked Users" link="/admin/dashboard/blocked" value={blockedUsers.length} icon={blocked} color="red-500" />
+        <SummaryCard label="Total Seller" link="/admin/dashboard/sellers" value={sellers.length || '0'} icon={seller} color="green-500" />
+        <SummaryCard label="Total Buyer" link="/admin/dashboard/buyers" value={buyers.length || '0'} icon={buyer} color="blue-500" />
+        <SummaryCard label="Blocked Users" link="/admin/dashboard/blocked" value={blockedUsers.length || '0'} icon={blocked} color="red-500" />
       </div>
 
       <div>

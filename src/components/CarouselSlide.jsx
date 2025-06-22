@@ -39,11 +39,11 @@ const CarouselSlide = ({ slides }) => {
                 </p>
               )}
               <h2 className="text-2xl md:text-4xl font-extrabold">{slide.title}</h2>
-              <h3 className="text-lg md:text-2xl font-semibold mt-2">{slide.subtitle}</h3>
-              <p className="mt-4 text-sm md:text-lg">{slide.description}</p>
+              <h3 className="text-lg md:text-2xl font-semibold mt-3">{slide.subtitle}</h3>
+              <p className="mt-3 text-sm md:text-lg">{slide.description}</p>
               {slide.buttonText && (
                 <a href={slide.buttonLink}>
-                  <button className="mt-6 px-3 md:px-5 py-1 md:py-2 bg-yellow-500 cursor-pointer text-md md:text-lg text-black font-semibold rounded hover:bg-yellow-600 transition">
+                  <button className="mt-4 px-3 md:px-5 py-1 md:py-2 bg-yellow-500 cursor-pointer text-md md:text-lg text-black font-semibold rounded hover:bg-yellow-600 transition">
                     {slide.buttonText}
                   </button>
                 </a>

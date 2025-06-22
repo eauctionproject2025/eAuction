@@ -123,7 +123,7 @@ export default function ProfilePage() {
                   </button>
                 ) : (
                   <div className="flex flex-col gap-2">
-                    <label htmlFor="image" className="text-sm text-gray-100 mt-3">
+                    <label htmlFor="image" className="text-sm text-gray-700 mt-3">
                           Change Profile picture
                     </label>
                     <input
@@ -135,7 +135,7 @@ export default function ProfilePage() {
                       onChange={(e) => setNewImage(e.target.files[0])}
                     />
 
-                    <label htmlFor="description" className="text-sm text-gray-100 mt-3">
+                    <label htmlFor="description" className="text-sm text-gray-700 mt-3">
                           Update Description
                     </label>
                     <textarea
@@ -146,7 +146,7 @@ export default function ProfilePage() {
                       onChange={(e) => setDescription(e.target.value)}
                     />
 
-                    <label htmlFor="address" className="text-sm text-gray-100 mt-3">
+                    <label htmlFor="address" className="text-sm text-gray-700 mt-3">
                           Update Address
                     </label>
                     <input
@@ -167,7 +167,7 @@ export default function ProfilePage() {
                       </button>
                       <button
                         onClick={() => setEditMode(false)}
-                        className="bg-gray-400 text-black px-4 py-2 rounded cursor-pointer hover:bg-gray-500"
+                        className="bg-gray-500 text-red-500 px-4 py-2 rounded cursor-pointer hover:bg-gray-600"
                       >
                         Cancel
                       </button>
