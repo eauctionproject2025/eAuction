@@ -2,21 +2,27 @@
 import React from 'react'
 import { useState, useEffect } from 'react';
 import CategoryCard from "@/components/categoryCard";
-import Auction from "@/components/auction";
 
 function page() {
   const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    setLoading(true);
     const fetchCategories = async () => {
       const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}api/categories`);
       const data = await res.json();
       setCategories(data);
+      setLoading(false);
     };
 
     fetchCategories();
   }, []);
-    
+
+  if (loading) {
+    return <div className="text-center h-[60dvh] w-full flex justify-center items-center">Loading...</div>;
+  }
+
 
   return (
     <div>
