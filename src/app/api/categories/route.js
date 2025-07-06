@@ -1,9 +1,5 @@
-import { useSession } from 'next-auth/react';
-
-const { data: session } = useSession();
-const token = session?.token ;
-
-export async function GET() {
+export async function GET(req) {
+  const token = req.headers.get("authorization")?.replace("Bearer ", "");
   const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/categories`, {
     headers: {
       'Authorization': `Bearer ${token}`,
