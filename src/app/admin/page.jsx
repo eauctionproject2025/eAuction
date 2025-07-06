@@ -44,7 +44,7 @@ export default function AdminLogin() {
       } else {
         router.push('/admin/dashboard');
       }
-    }, 1000);
+    }, 500);
   };
 
   if (status === 'loading') return null; // Prevent flicker during session load
@@ -111,7 +111,14 @@ export default function AdminLogin() {
               className='w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-500 transition'
             >
               Login
-            </button>
+              </button>
+              <button
+                type='button'
+                className='w-full text-gray-400 hover:text-black py-2 rounded transition'
+                onClick={() => router.push('/')}
+              >
+                Back to Home 
+              </button>
           </form>
         </div>
       )}

@@ -1,14 +1,12 @@
 "use client";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import Image from "next/image";
 import React from "react";
 import { useParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import CountdownTimer from "@/components/CountdownTimer";
 import CurrencyFormat from "@/components/currencyFormat";
 import ItemSkeleton from "@/components/itemSkeleton"; 
-import sell from '@/public/icon/auction.svg'
 import winner from '@/public/icon/ended.svg'
 
 function Item() {
@@ -29,7 +27,7 @@ function Item() {
       prev === 0 ? auction.imageUrls.length - 1 : prev - 1
     );
   };
-
+  console.log('auction', auction);
   useEffect(() => {
     const interval = setInterval(() => setNow(new Date()), 1000);
     return () => clearInterval(interval);

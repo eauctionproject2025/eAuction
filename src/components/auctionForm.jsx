@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { getSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 
@@ -10,8 +10,19 @@ export default function AuctionForm() {
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
   const [images, setImages] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [categoryId, setCategoryId] = useState("");
 
   const router = useRouter(); 
+
+    useEffect(() => {
+      const fetchCategories = async () => {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}api/categories`);
+        const data = await res.json();
+        setCategories(data);
+      };
+      fetchCategories();
+    }, []);
 
   const handleImageChange = (e) => {
     const selectedFiles = Array.from(e.target.files);
@@ -30,6 +41,7 @@ export default function AuctionForm() {
     formData.append("startingBid", Number(startingBid));
     formData.append("startTime", startTime);
     formData.append("endTime", endTime);
+    formData.append("categories[]", categoryId); 
 
     images.forEach((img) => {
       formData.append("images", img); 
@@ -53,6 +65,7 @@ export default function AuctionForm() {
       setStartingBid("");
       setEndTime("");
       setImages([]);
+      setCategoryId("");
 
       router.push('/'); 
     } else {
@@ -88,6 +101,25 @@ export default function AuctionForm() {
           required
           className="outline rounded-sm p-1.5"
         />
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <label htmlFor="category" className="block text-sm/6 font-medium text-gray-100">
+          Category
+        </label>
+        <select
+          value={categoryId}
+          onChange={(e) => setCategoryId(e.target.value)}
+          required
+          className="outline rounded-sm p-1.5"
+        >
+          <option value="">Select a category</option>
+          {categories.map((category) => (
+            <option key={category._id} value={category._id}>
+              {category.name}
+            </option>
+          ))}
+        </select>
       </div>
 
       <div className="flex flex-col gap-2">

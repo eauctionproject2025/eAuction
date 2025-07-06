@@ -1,9 +1,9 @@
 'use client';
 
 import Link from 'next/link';
-import { useSession } from 'next-auth/react';
+import { useSession, signOut } from 'next-auth/react';
 import { useRouter, usePathname } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect } from 'react';  
 
 export default function AdminLayout({ children }) {
   const { data: session, status } = useSession();
@@ -12,12 +12,18 @@ export default function AdminLayout({ children }) {
 
   useEffect(() => {
     if (status === 'loading') return;
-    if (status === 'unauthenticated') router.replace('/login');
+    if (status === 'unauthenticated') router.replace('/admin');
     if (status === 'authenticated' && session?.user?.role !== 'admin') {
       console.log('Access denied:', session?.user?.role);
-      router.replace('/login');
+      router.replace('/admin');
     }
   }, [session, status]);
+
+  const handleSignOut = () => {
+    sessionStorage.removeItem("greeted");
+    signOut();
+    router.replace('/admin');
+  };
 
   if (status === 'loading') return <div>Loading...</div>;
 
@@ -39,11 +45,17 @@ export default function AdminLayout({ children }) {
             <SidebarLink href="/admin/dashboard/sellers" label="Seller List" active={isActive('/admin/dashboard/sellers')} />
             <SidebarLink href="/admin/dashboard/buyers" label="Buyer List" active={isActive('/admin/dashboard/buyers')} />
             <SidebarLink href="/admin/dashboard/blocked" label="Blocked Users" active={isActive('/admin/dashboard/blocked')} />
+            <SidebarLink href="/admin/dashboard/category" label="Category Management" active={isActive('/admin/dashboard/category')} />
           </nav>
         </div>
         <div className="mt-10 space-y-3">
           <SidebarLink href="/" label="Home" active={isActive('/')} customColor="text-green-500" />
-          <SidebarLink href="/login" label="Logout" active={isActive('/login')} customColor="text-red-500" />
+          <button
+            onClick={handleSignOut}
+            className="block lg:h-10 px-2 py-1 cursor-pointer rounded duration-200 hover:ml-1 hover:text-blue-400 text-red-500"
+          >
+            Logout
+          </button>
         </div>
       </aside>
 

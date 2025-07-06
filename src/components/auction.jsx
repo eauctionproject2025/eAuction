@@ -9,7 +9,8 @@ import { useEffect, useState } from "react";
 
 function Auction({
   id,
-  imgLink=[],
+  imgLink = [],
+  categories,
   href,
   title,
   price,
@@ -21,9 +22,8 @@ function Auction({
   const { data: session } = useSession();
   const currentUserId = session?.user?.id;
   const isOwner = currentUserId === seller;
-  const admin = session?.user?.role === "admin";
+  const admin = session?.user?.role == "admin";
 
-  
   // Inside your component:
   const [now, setNow] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -130,7 +130,7 @@ function Auction({
             </Link>
           )}
 
-          {isOwner || admin && (
+          {(isOwner || admin) && (
             <button
               onClick={handleDelete}
               className="bg-red-500 hover:bg-red-600 text-white  transition px-4 py-2 rounded-md shadow-sm"

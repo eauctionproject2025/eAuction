@@ -10,6 +10,7 @@ import CarouselSlide from "@/components/CarouselSlide";
 import offer4 from "@/public/item/offer4.jpg";
 import offer5 from "@/public/item/offer5.jpeg";
 import search from "@/public/icon/search.svg";
+import CategoryCard from "@/components/categoryCard";
 
 const slides = [
   {
@@ -34,6 +35,7 @@ export default function Home() {
   const [auctions, setAuctions] = useState([]);
   const [greet, setGreet] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [categories, setCategories] = useState([]);
 
   const { data: session } = useSession();
 
@@ -64,6 +66,19 @@ export default function Home() {
   }
   fetchAuctions();
   }, []);
+  
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}api/categories`);
+        const data = await response.json();
+        setCategories(data.slice(0, 5));
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+    fetchCategories();
+  }, []);
 
   return (
     <div className="w-full flex flex-col items-center justify-center">
@@ -88,6 +103,17 @@ export default function Home() {
               {/* <Image src={offer1} alt="banner" width={1000} height={300} className="object-cover" /> */}
               <CarouselSlide slides={slides} />
           </div>
+          <div className="w-[90%] flex flex-col items-left justify-between mb-5">
+            <h2 className="text-lg font-bold">Category</h2>
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6 p-4">
+                {categories.map((category) => (
+                    <CategoryCard key={category._id} category={category} />
+                ))}
+              <button className="outline outline-yellow-500 text-yellow-500 px-2 w-[150px] h-[170px] rounded hover:bg-yellow-500 hover:text-white" onClick={() => window.location.href = "/category"}>
+                View All Categories
+              </button>
+            </div>
+          </div>
           <div className="w-[90%] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 items-center justify-items-center">
             {auctions.map((auction) => (
             <Auction
@@ -98,8 +124,9 @@ export default function Home() {
               href="#"
               startTime={auction.startTime}
               endTime={auction.endTime}
-              imgLink={auction.imageUrls|| auction.imageUrl} // all auction's image not in array
-              seller={auction.seller}
+              imgLink={auction.imageUrls|| auction.imageUrl}
+              categories={auction.categories}
+              seller={auction.seller._id} 
               onDelete={handleDelete}
               publicUrl={auction.cloudUrls|| auction.cloudUrl}
             />
