@@ -2,13 +2,15 @@
 import { useSession } from "next-auth/react";
 import AuctionForm from "@/components/auctionForm";
 import Link from "next/link";
+import Image from "next/image";
+import auctionImage from "@/public/bg/onlineAuction.jpg";
 
 export default function CreateAuctionPage() {
   const { data: session } = useSession();
 
   if (!session) {
     return <div className="h-[300px] flex flex-col gap-3 items-center justify-center text-xl">
-      <p> Registered <b>SELLER....!</b></p>
+      <p> Registered as a <b>SELLER....!</b></p>
       <p> Yes --  <Link href={'/login'} className="text-blue-500 font-bold"> Login</Link></p>
       <p> No --  <Link href={'/register'} className="text-blue-500 font-bold"> Register</Link></p>
     </div>;
@@ -20,9 +22,16 @@ export default function CreateAuctionPage() {
   }
 
   return (
-    <div  className="flex flex-col items-center justify-center gap-6 mt-4">
-      <h1 className="text-2xl">Create Auction</h1>
-      <AuctionForm />
+    <div className="w-full flex items-center justify-center gap-6 pt-4 relative overflow-hidden mt-[-15px] mb-[-20px] pt-5 pb-10">
+      <Image 
+        src={auctionImage} 
+        alt="Auction Background" 
+        fill
+        className="object-cover brightness-50 -z-10" 
+      />
+      <div className="flex items-center justify-center gap-4 w-full py-8 px-6 relative z-10">
+        <AuctionForm />
+      </div>
     </div>
   );
 }

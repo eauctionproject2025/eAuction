@@ -1,37 +1,34 @@
+const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 async function getAuctions() {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}api/auctions`);
-    return response.json();
+    const response = await fetch(`${BASE_URL}api/auctions`);
+    if (!response.ok) throw new Error("Failed to fetch all auctions");
+    return await response.json();
+}
+ 
+async function fetchAuctionsByType(type) {
+  const response = await fetch(`${BASE_URL}api/auctions?type=${type}`);
+  if (!response.ok) throw new Error("Failed to fetch auctions");
+  return await response.json();
 }
 
 async function getActiveAuctions() {
-    const auctions = await getAuctions()
-    const now = new Date();
-    return auctions.filter(auction => {
-        if (!auction.startTime || !auction.endTime) return false;
-        const start = new Date(auction.startTime);
-        const end = new Date(auction.endTime);
-        return start <= now && now <= end;
-    });
+  return await fetchAuctionsByType("active");
 }
 
 async function getEndedAuctions() {
-    const auctions = await getAuctions();
-    const now = new Date();
-    return auctions.filter(auction => {
-        if (!auction.startTime || !auction.endTime) return false;
-        const end = new Date(auction.endTime);
-        return now > end;
-    });
+  return await fetchAuctionsByType("ended");
 }
 
 async function getPendingAuctions() {
-    const auctions = await getAuctions();
-    const now = new Date();
-    return auctions.filter(auction => {
-        if (!auction.startTime) return false;
-        const start = new Date(auction.startTime);
-        return now < start;
-    });
+  return await fetchAuctionsByType("pending");
 }
 
-export { getAuctions, getActiveAuctions, getEndedAuctions, getPendingAuctions };
+async function getSoonEndingAuctions() {
+  return await fetchAuctionsByType("soon-ending");
+}
+
+async function getRecentAuctions() {
+  return await fetchAuctionsByType("recent");
+}
+
+export { getAuctions, getActiveAuctions, getEndedAuctions, getPendingAuctions, getSoonEndingAuctions, getRecentAuctions };

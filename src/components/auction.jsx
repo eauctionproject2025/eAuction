@@ -69,7 +69,7 @@ function Auction({
   };
 
   return (
-    <div className="bg-gray-100/10 text-black shadow-md shadow-gray-800 rounded-md overflow-hidden w-full max-w-xs">
+    <div className="bg-gray-100/10 text-black shadow-md shadow-gray-800 rounded-md overflow-hidden w-[300px] md:w-[270px]">
       {/* Image Wrapper */}
       <div className="relative w-full h-48 overflow-hidden rounded-md">
       {imgLink.length > 1 ? (
@@ -111,7 +111,7 @@ function Auction({
         <div className="text-xl font-semibold ">{title}</div>
         {session && (
           <div className="lg:text-lg md:text-md">
-            Current Bid: <CurrencyFormat price={price} /> ৳{" "}
+            Current Bid: <CurrencyFormat price={price} /> ${" "}
           </div>
         )}
         <CountdownTimer startTime={startTime} endTime={endTime} />
@@ -119,11 +119,11 @@ function Auction({
           {now && (
             <Link href={`/items/${id}`}>
               {session?.user.role === "buyer" ? (
-                <button className={`bg-${now > start && now < end ? "blue-600" : "gray-500"} hover:bg-${now > start && now < end ? "blue-700" : "gray-600"} text-white transition px-4 py-2 rounded-md shadow-sm cursor-pointer`}>
+                <button className={`bg-${now > start && now < end ? "blue-600" : "gray-500"} hover:bg-${now > start && now < end ? "blue-700" : "gray-600"} text-white transition text-sm px-3 py-1.5 rounded-sm shadow-sm cursor-pointer`}>
                   Place Bid
                 </button>
               ) : (
-                <button className="bg-gray-500 hover:bg-gray-600 text-white transition px-4 py-2 rounded-md shadow-sm cursor-pointer">
+                <button className="bg-gray-500 hover:bg-gray-600 text-white transition text-sm px-3 py-1.5 rounded-sm shadow-sm cursor-pointer">
                   View Details
                 </button>
               )}
@@ -133,7 +133,7 @@ function Auction({
           {(isOwner || admin) && (
             <button
               onClick={handleDelete}
-              className="bg-red-500 hover:bg-red-600 text-white  transition px-4 py-2 rounded-md shadow-sm"
+              className="bg-red-500 hover:bg-red-600 text-white  transition text-sm px-3 py-1.5 rounded-sm shadow-sm"
             >
               Delete
             </button>

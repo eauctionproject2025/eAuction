@@ -8,8 +8,13 @@ import guest from "@/public/profile/user.svg";
 import search from "@/public/icon/search.svg";
 
 function Navbar() {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [showNavbar, setShowNavbar] = useState(true);
+
   const router = useRouter();
-  const params = useParams();
+
   const menus = [
     { id: 1, name: "All Auction", link: "/" },
     { id: 2, name: "All Offers", link: "#" },
@@ -18,10 +23,14 @@ function Navbar() {
     { id: 5, name: "Contact", link: "#" },
   ];
 
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [userMenuOpen, setUserMenuOpen] = useState(false);
-  const [showNavbar, setShowNavbar] = useState(true);
-
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchTerm.trim()) {
+      router.push(`/search?query=${encodeURIComponent(searchTerm)}`);
+      setSearchTerm("");
+    }
+  }
+ 
   const { data: session } = useSession();
   const userId = session?.user?.id;
   const role = session?.user?.role;
@@ -46,6 +55,7 @@ function Navbar() {
   const handleSignOut = () => {
     sessionStorage.removeItem("greeted");
     signOut();
+    router.push("/");
   };
 
   return (
@@ -62,15 +72,19 @@ function Navbar() {
         </Link>
 
         {/* Search Bar (hidden on mobile) */}
-        <div className="flex-grow h-9 md:max-w-lg hidden md:flex items-center border rounded overflow-hidden">
-          <input
-            type="text"
-            placeholder="Search auctions..."
-            className="w-full px-3 py-2 focus:outline-none bg-white"
-          />
-          <div className="bg-yellow-400 w-12 h-full flex items-center justify-center cursor-pointer text-white hover:bg-yellow-500">
-            <Image src={search} alt="Search" className="w-5 h-5" />
-          </div>
+        <div className="flex-grow h-7 md:h-9  lg:max-w-lg flex items-center border rounded-md overflow-hidden">
+          <form onSubmit={handleSearch} className="flex w-full h-full flex items-center justify-between">
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Search products..."
+              className="md:flex-grow pl-2 md:pl-3 w-[90%] py-1 md:py-2 outline-none text-sm md:text-md"
+            />
+            <div className="bg-yellow-400 w-8 md:w-11 p-1.5 h-full flex items-center justify-center cursor-pointer text-white hover:bg-yellow-500">
+              <Image src={search} alt="Search" className="w-5 h-5" onClick={handleSearch} />
+            </div>
+          </form>
         </div>
 
         {/* Mobile Toggle */}
@@ -119,7 +133,7 @@ function Navbar() {
           {role === "admin" ? (
             <Link
               href="/admin/dashboard"
-              className="px-4 py-2 bg-gray-600 text-white rounded hover:text-gray-600 hover:bg-yellow-400"
+              className="px-3 py-1.5 text-sm bg-gray-600 text-white rounded hover:text-gray-600 hover:bg-yellow-400"
             >
               Dashboard
             </Link>
@@ -140,7 +154,7 @@ function Navbar() {
                 <div className="absolute right-0 mt-2 w-48 bg-white border rounded shadow-md z-50 p-2">
                   <Link
                     href={`/profile/${userId}`}
-                    className="block px-4 py-2 hover:bg-gray-100 text-gray-900"
+                    className="block px-3 py-1.5 text-sm hover:bg-gray-100 text-gray-900 cursor-pointer"
                     onClick={() => setUserMenuOpen(false)}
                   >
                     Profile
@@ -150,7 +164,7 @@ function Navbar() {
                       handleSignOut();
                       setUserMenuOpen(false);
                     }}
-                    className="w-full text-left px-4 py-2 hover:bg-gray-100 text-red-400"
+                    className="w-full text-left px-3 py-1.5 text-sm hover:bg-gray-100 text-red-400 cursor-pointer"
                   >
                     Sign out
                   </button>
@@ -160,13 +174,13 @@ function Navbar() {
           ) : (
             <>
               <button
-                className="px-4 py-2 bg-yellow-500 text-white rounded text-semibold hover:bg-yellow-400 hover:text-gray-700"
+                className="px-3 py-1.5 text-sm bg-yellow-500 text-white rounded text-semibold hover:bg-yellow-400 hover:text-gray-700 cursor-pointer"
                 onClick={() => router.push("/login")}
               >
                 Sign in
               </button>
               <button
-                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 hover:text-gray-900"
+                className="px-3 py-1.5 text-sm bg-blue-500 text-white rounded hover:bg-blue-600 hover:text-gray-900 cursor-pointer"
                 onClick={() => router.push("/register")}
               >
                 Sign up
@@ -199,7 +213,7 @@ function Navbar() {
               <li key={item.id}>
                 <Link
                   href={item.link}
-                  className="block py-2 px-4 hover:bg-gray-100 hover:text-green-500"
+                  className="block py-2 px-4 hover:bg-gray-200 hover:text-orange-500"
                   onClick={() => setMenuOpen(false)}
                 >
                   {item.name}
@@ -210,7 +224,7 @@ function Navbar() {
             {role === "admin" ? (
               <Link
                 href="/admin/dashboard"
-                className="block py-2 px-4 hover:bg-gray-100 hover:text-purple-600"
+                className="block py-2 px-4 hover:bg-gray-100 hover:text-orange-600 cursor-pointer"
                 onClick={() => setMenuOpen(false)}
               >
                 Dashboard
@@ -219,7 +233,7 @@ function Navbar() {
               <>
                 <Link
                   href={`/profile/${userId}`}
-                  className="block py-2 px-4 hover:bg-gray-100 hover:text-green-500"
+                  className="block py-2 px-4 hover:bg-gray-100 hover:text-green-500 cursor-pointer"
                   onClick={() => setMenuOpen(false)}
                 >
                   Profile
@@ -229,7 +243,7 @@ function Navbar() {
                     handleSignOut();
                     setMenuOpen(false);
                   }}
-                  className="w-full text-left py-2 px-4 text-red-400 hover:bg-gray-100"
+                  className="w-full text-left py-2 px-4 text-red-400 hover:bg-gray-100 cursor-pointer"
                 >
                   Sign out
                 </button>
@@ -238,14 +252,14 @@ function Navbar() {
               <>
                 <Link
                   href="/login"
-                  className="block py-2 px-4 hover:bg-gray-100"
+                  className="block py-2 px-4 hover:bg-gray-100 cursor-pointer"
                   onClick={() => setMenuOpen(false)}
                 >
                   Sign in
                 </Link>
                 <Link
                   href="/register"
-                  className="block py-2 px-4 hover:bg-gray-100"
+                  className="block py-2 px-4 hover:bg-gray-100 cursor-pointer"
                   onClick={() => setMenuOpen(false)}
                 >
                   Sign up

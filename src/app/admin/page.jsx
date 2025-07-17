@@ -47,22 +47,17 @@ export default function AdminLogin() {
     }, 500);
   };
 
-  if (status === 'loading') return null; // Prevent flicker during session load
+  if (status === 'loading') return null; 
 
   return (
     <>
       {session?.user?.role === 'admin' ? (
         <div className='w-full h-full flex items-center justify-center'>
-          <div className='w-[90%] md:w-[60%] lg:w-[50%] h-[10%] flex flex-col items-center justify-center'>
-            {showAlert && (
-              <Alert
-                msg={'Admin already logged in'}
-                onClose={() => setShowAlert(false)}
-              />
-            )}
+          <div className='w-[90%] md:w-[60%] lg:w-[50%] h-[500px] text-center flex flex-col items-center justify-center'>
             <div>
+              You are already logged in as an admin. <br />
               Move to{' '}
-              <a href='/admin/dashboard' className='text-blue-200'>
+              <a href='/admin/dashboard' className='text-blue-400'>
                 Dashboard
               </a>
             </div>

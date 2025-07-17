@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 
-const Alert = ({ msg, onClose }) => {
+const Alert = ({ msg, onClose=() => {} }) => {
   return (
     <div className="w-full p-3 mb-2 flex items-center justify-center bg-orange-100 border border-red-400 rounded-lg shadow-sm font-sans">
       <div className="w-5 h-5 mr-2 mt-0.5">

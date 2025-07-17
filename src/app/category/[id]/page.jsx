@@ -37,29 +37,38 @@ function Page() {
 
   return (
     <div className="w-[90%] flex flex-col items-center justify-center">
-      <h1 className='text-2xl font-bold mb-4 my-2 text-center'>{categoryId}</h1>
-      <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-4">
-        {loading ? (
-          <p className="text-center h-12">Loading...</p>
+      {loading ? (
+          <div className=" w-full h-[50dvh] flex flex-cos items-center justify-center rounded">
+            <p className="text-lg md:text-2xl">Loading...</p>
+          </div>
         ) : (
-          auctions.map((auction) => (
-            <Auction
-              key={auction._id}
-              id={auction._id}
-              title={auction.title}
-              price={auction.startingBid}
-              href="#"
-              startTime={auction.startTime}
-              endTime={auction.endTime}
-              imgLink={auction.imageUrls || auction.imageUrl}
-              seller={auction.seller}
-              onDelete={handleDelete}
-              publicUrl={auction.cloudUrls || auction.cloudUrl}
-            />
-          ))
+          <>
+        <h1 className='text-2xl font-bold mb-4 my-2 text-center border-b-4 border-yellow-700'>Category "{categoryId}"</h1>
+        {auctions.length > 0 ? (<div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-4">
+            {auctions.map((auction) => (
+              <Auction
+                key={auction._id}
+                id={auction._id}
+                title={auction.title}
+                price={auction.startingBid}
+                href="#"
+                startTime={auction.startTime}
+                endTime={auction.endTime}
+                imgLink={auction.imageUrls || auction.imageUrl}
+                seller={auction.seller}
+                onDelete={handleDelete}
+                publicUrl={auction.cloudUrls || auction.cloudUrl}
+              />
+            ))}
+         </div>
+         ):(
+          <div className="bg-red-400 w-full h-[50dvh] flex flex-cos items-center justify-center rounded">
+            <h1 className="text-lg md:text-2xl"> Products are not available in this Category </h1>
+          </div>
+          )}
+        </>
         )}
       </div>
-    </div>
   )
 }
 

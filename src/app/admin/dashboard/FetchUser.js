@@ -1,9 +1,11 @@
+const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 async function getUsers() {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}api/users`);
-    if (!response.ok) {
-        throw new Error('Failed to fetch users');
-    }
-    return response.json();
+    const response = await fetch(`${BASE_URL}api/users`);
+    if (!response.ok) {throw new Error('Failed to fetch users');}
+    return await response.json();
+}
+async function getUserByType(){
+    
 }
 
 async function getSellers() {

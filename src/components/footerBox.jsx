@@ -26,11 +26,11 @@ function FooteBox() {
                     BidWise
                     </Link>
                 </div>
-                <div className='w-[100%] flex flex-col space-y-3 md:space-y-8'>
+                <div className='w-[100%] flex flex-col text-sm md:text-base space-y-3 md:space-y-8'>
                     <h1> Let's get some awesome Items from BidWise </h1>
                 </div>
             </div>
-            <div className='w-95% md:w-[25%] h-full flex md:flex-col items-center gap-5 md:gap-0 md:my-0'>
+            <div className='w-95% md:w-[25%] h-full flex md:flex-col justify-between my-3 gap-9 md:gap-0 md:my-0'>
                 <ul className='md:space-y-2'>
                     {links1.map((link =>(
                         <li key={link.id} className='text-[12px] md:text-[15px] font-light text-gray-600 hover:text-gray-800'><Link href={link.link}>{link.label}</Link></li>
@@ -49,7 +49,7 @@ function FooteBox() {
                     )))}
                     </ul>
             </div>
-            <div className='w-95% md:w-[25%] h-full flex flex-col space-y-1 md:space-y-3'>
+            <div className='w-95% md:w-[25%] h-full flex flex-col text-sm md:text-base space-y-1 md:space-y-3'>
                     Sell your precious items to the world and get the best price
             </div>
         </div>
