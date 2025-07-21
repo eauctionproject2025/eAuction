@@ -1,11 +1,11 @@
 'use client';
 import Image from 'next/image';
 import Link from 'next/link';
-export default function SummaryCard({ link, label, value, icon, color = 'gray-700' }) {
-  if (!value) {
-    console.error("Missing required props: label, value, or icon");
-    return null;
-  }
+export default function SummaryCard({ link, label, value='0', icon, color = 'gray-700' }) {
+  // if (!value) {
+  //   console.error("Missing required props: label, value, or icon");
+  //   return null;
+  // }
   return (
     <Link href={link}>
       <div

@@ -14,7 +14,13 @@ export default function CreateAuctionPage() {
       <p> Yes --  <Link href={'/login'} className="text-blue-500 font-bold"> Login</Link></p>
       <p> No --  <Link href={'/register'} className="text-blue-500 font-bold"> Register</Link></p>
     </div>;
-}
+  }
+  if (session.user.blocked) {
+    return <div className="h-[300px] flex items-center justify-center text-xl text-red-400">
+      <p>Your account is <b>BLOCKED</b>. Contact support for assistance.</p>
+    </div>;
+  }
+
   if (session.user.role !== "seller") {
     return <div className="h-[300px] flex items-center justify-center text-xl text-red-400">
       <p>Only <b>SELLERS</b> can create auctions.</p>

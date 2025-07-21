@@ -10,7 +10,6 @@ export const registerUser = async (userData) => {
             method: 'POST',
             headers:{ 'Content-Type': 'multipart/form-data'},
     });
-    console.log('registration responses ' , response.data) 
     return response.data; // response from backend
     } catch (error) {
         return error.response.data || {error : 'Registration failed'};

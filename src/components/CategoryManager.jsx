@@ -1,13 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useSession } from 'next-auth/react';
 
 export default function CategoryManager() {
   const [categories, setCategories] = useState([]);
   const [name, setName] = useState('');
   const [icon, setIcon] = useState(null); // <-- null not ''
-  const [link, setLink] = useState('');
+  const fileInputRef = useRef(null);
 
   const { data: session } = useSession();
 
@@ -24,14 +24,25 @@ export default function CategoryManager() {
   const addCategory = async (e) => {
     e.preventDefault();
 
-    if (!icon) {
-      alert('Please select an icon file!');
+    if (!name || !icon) {
+      alert('Please fill in all fields!');
+      setName('');
+      setIcon(null);
+      
+      // Reset file input properly
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+      
+      return;
+    }
+    if (icon.size > 2 * 1024 * 1024) { // 2MB limit
+      alert('Image size should not exceed 2MB.');
       return;
     }
 
     const formData = new FormData();
     formData.append('name', name);
-    formData.append('link', link);
     formData.append('icon', icon);
     
     const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}api/categories`, {
@@ -46,11 +57,15 @@ export default function CategoryManager() {
     if (res.ok) {
       setName('');
       setIcon(null);
-      setLink('');
       fetchCategories();
     } else {
-      console.error(await res.json());
-      alert('Failed to add category.');
+      const error = await res.json();
+      alert(`Failed to add category. ${error.message || ''}`);
+      setName('');
+      setIcon(null);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
     }
   };
   const deleteCategory = async (id) => {
@@ -75,29 +90,26 @@ export default function CategoryManager() {
       <form onSubmit={addCategory} className="flex flex-col space-y-4">
         <input
           type="text"
-          value={name}
+          //I want only ther first letter to be capitalized
+          value={name.toLowerCase()}
           onChange={e => setName(e.target.value)}
           placeholder="Category name"
           className="border p-2 rounded"
-        />
-        <input
-          type="text"
-          value={link}
-          onChange={e => setLink(e.target.value)}
-          placeholder="Category link"
-          className="border p-2 rounded"
+          required
         />
         <input
           type="file"
+          ref={fileInputRef}
           onChange={e => setIcon(e.target.files[0])}
           className="border p-2 rounded cursor-pointer"
+          required
         />
         <button type="submit" className="bg-blue-500 text-white p-2 rounded cursor-pointer hover:bg-blue-600">
           Add
         </button>
       </form>
 
-      <h3 className="text-lg font-semibold mt-6">Existing Categories</h3>
+      <h3 className="text-lg font-semibold mt-6">Listed Categories</h3>
       {categories.length > 0 ? (
         <ul className="mt-2">
           {categories.map((category) => (

@@ -26,9 +26,10 @@ const handler = NextAuth({
           return {
             id: response.user.id,
             name: response.user.name,
-            email: response.user.email,
+            // email: response.user.email,
             role: response.user.role,
             image: response.user.image, 
+            blocked: response.user.blocked,
             accessToken: response.accessToken,
           };
         } catch (error) {
@@ -42,6 +43,7 @@ const handler = NextAuth({
       if (user) {
         token.role = user.role;
         token.accessToken = user.accessToken;
+        token.blocked = user.blocked;
         token.id = user.id;
         token.image = user.image; 
       }
@@ -49,7 +51,7 @@ const handler = NextAuth({
     },
     async session({ session, token }) {
       if (token) {
-        session.user = { ...session.user, role: token.role, id: token.id, image: token.image };    
+        session.user = { ...session.user, role: token.role, id: token.id, image: token.image, blocked: token.blocked };    
         session.token = token.accessToken;
       }
       return session;

@@ -54,6 +54,7 @@ export default function AuctionForm() {
 
       if (endDate <= startDate) {
         setShowAlert(true);
+        setEndTime('');
       } else if (duration > maxDuration) {
         setMaximumDuration(true);
       }
@@ -61,6 +62,13 @@ export default function AuctionForm() {
       console.error("Date parsing error:", error);
     }
   };
+
+  //when maximum duration alert is closed, reset endTime
+  useEffect(() => {
+    if (maximumDuration) {
+      setEndTime(''); // Reset endTime when alert is closed
+    }
+  }, [maximumDuration]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

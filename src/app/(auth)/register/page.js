@@ -4,12 +4,17 @@ import { registerUser } from "@/app/api/authService";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import registerAution from "@/public/bg/registerAution.jpg"
+import Alert from "@/components/Alert";
+import Success from "@/components/success";
 
 function RegisterPage() {
   const router = useRouter();
   const [errors, setErrors] = useState({});
   const [successMsg, setSuccessMsg] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+
 
   const { data: session } = useSession();
 
@@ -40,6 +45,7 @@ function RegisterPage() {
       username: name,
     };
 
+    // Client-side validation
     const newErrors = {};
     if (!firstName) newErrors.firstName = "First name is required";
     if (!lastName) newErrors.lastName = "Last name is required";
@@ -50,21 +56,35 @@ function RegisterPage() {
     else if (password.length < 6) newErrors.password = "Password must be at least 6 characters";
     if (!confirmPassword) newErrors.confirmPassword = "Please confirm your password";
     else if (password !== confirmPassword) newErrors.confirmPassword = "Passwords do not match";
-
     if (!role) newErrors.role = "Please select a role";
+    if (!firstName || !lastName || !email || !nid || !password || !confirmPassword || !role) {
+      setShowAlert(true);
+    }
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
+      setIsSubmitting(false);
       return;
     }
 
     try {
       const response = await registerUser(formData);
-      setSuccessMsg(response.msg || "Registration successful! Please login.");
-      router.push("/login");
+      
+      setShowSuccess(true);
+      setTimeout(() => {
+        router.push('/login');
+      }, 1000); 
     } catch (error) {
-      setErrors({ global: error.data?.msg || "Register Failed. Unable to connect to server." });
+      console.error("Registration error:", error);
+      
+      let errorMessage = "Registration failed. Please try again.";
+      
+      alert(`Registration Failed: ${errorMessage}`);
+      
+      setErrors({ global: errorMessage });
+      
     } finally {
+      // Always reset submitting state
       setIsSubmitting(false);
     }
   };
@@ -89,19 +109,18 @@ function RegisterPage() {
         backgroundRepeat: 'no-repeat'
       }} className="w-full flex items-center justify-center mt-[-15px] mb-[-20px] pt-5 pb-10">
         <form onSubmit={handleRegister}>
+          {showSuccess && <Success msg="Registration successful! Please login." onClick={() => router.push('/login')} />}
           <div className="w-[90dvw] md:w-[550px] mt-8 bg-white/10 backdrop-blur-md p-4 text-black rounded-md shadow-md shadow-white/50">
             <h1 className="text-base text-center font-semibold text-white font-semibold border-b-2 border-white/70 py-2 px-3 rounded text-xl">
               Create an account
             </h1>
             <div className="border-b border-gray-900/10 flex flex-col justify-center items-center">
-              {errors.global && <p className="text-red-400 text-sm mt-2">{errors.global}</p>}
-              {successMsg && <p className="text-green-400 text-sm mt-2">{successMsg}</p>}
-
+              {showAlert && <Alert msg="Please fill in all required fields." onClose={() => setShowAlert(false)} />}
               <div className="w-full mt-10 grid grid-cols-1 gap-x-6 gap-y-7 sm:grid-cols-6">
                 {/* First Name */}
                 <div className="col-span-6 md:col-span-3">
                   <label htmlFor="first-name" className="block text-sm font-medium text-white">First name</label>
-                  <input id="first-name" name="first-name" type="text" required autoComplete="given-name"
+                  <input id="first-name" name="first-name" type="text" autoComplete="given-name"
                     className="mt-2 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 outline-gray-300 focus:outline-2 focus:outline-indigo-600"
                   />
                   {errors.firstName && <p className="text-red-500 text-xs mt-1">{errors.firstName}</p>}
@@ -110,7 +129,7 @@ function RegisterPage() {
                 {/* Last Name */}
                 <div className="col-span-6 md:col-span-3">
                   <label htmlFor="last-name" className="block text-sm font-medium text-white">Last name</label>
-                  <input id="last-name" name="last-name" type="text" required autoComplete="family-name"
+                  <input id="last-name" name="last-name" type="text" autoComplete="family-name"
                     className="mt-2 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 outline-gray-300 focus:outline-2 focus:outline-indigo-600"
                   />
                   {errors.lastName && <p className="text-red-500 text-xs mt-1">{errors.lastName}</p>}
@@ -119,7 +138,7 @@ function RegisterPage() {
                 {/* Email */}
                 <div className="col-span-6">
                   <label htmlFor="email" className="block text-sm font-medium text-white">Email address</label>
-                  <input id="email" name="email" type="email" required autoComplete="email"
+                  <input id="email" name="email" type="email" autoComplete="email"
                     className="mt-2 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 outline-gray-300 focus:outline-2 focus:outline-indigo-600"
                   />
                   {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
@@ -128,7 +147,7 @@ function RegisterPage() {
                 {/* NID */}
                 <div className="col-span-6">
                   <label htmlFor="nid" className="block text-sm font-medium text-white">NID Number</label>
-                  <input id="nid" name="nid" type="number" required autoComplete="nid"
+                  <input id="nid" name="nid" type="number" autoComplete="nid"
                     className="mt-2 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 outline-gray-300 focus:outline-2 focus:outline-indigo-600"
                   />
                   {errors.nid && <p className="text-red-500 text-xs mt-1">{errors.nid}</p>}
@@ -137,7 +156,7 @@ function RegisterPage() {
                 {/* Password */}
                 <div className="col-span-6 md:col-span-3">
                   <label htmlFor="password" className="block text-sm font-medium text-white">Enter new Password</label>
-                  <input id="password" name="password" type="password" required autoComplete="new-password"
+                  <input id="password" name="password" type="password" autoComplete="new-password"
                     className="mt-2 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 outline-gray-300 focus:outline-2 focus:outline-indigo-600"
                   />
                   {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
@@ -146,7 +165,7 @@ function RegisterPage() {
                 {/* Confirm Password */}
                 <div className="col-span-6 md:col-span-3">
                   <label htmlFor="confirmPassword" className="block text-sm font-medium text-white">Confirm Password</label>
-                  <input id="confirmPassword" name="confirmPassword" type="password" required autoComplete="new-password"
+                  <input id="confirmPassword" name="confirmPassword" type="password" autoComplete="new-password"
                     className="mt-2 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 outline-gray-300 focus:outline-2 focus:outline-indigo-600"
                   />
                   {errors.confirmPassword && <p className="text-red-500 text-xs mt-1">{errors.confirmPassword}</p>}
@@ -177,10 +196,16 @@ function RegisterPage() {
             {/* Submit Buttons */}
             <div className="mt-6 flex items-center justify-center md:justify-end gap-x-6">
               <button type="button" className="text-sm font-semibold text-red-400 hover:bg-red-300 hover:text-red-700 rounded px-3 py-2 cursor-pointer">Cancel</button>
-              <button type="submit"
-                className="rounded-md bg-[#3dd477] cursor-pointer px-3 py-2 text-sm font-semibold text-black hover:bg-green-500 focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-indigo-600"
+              <button 
+                type="submit"
+                disabled={isSubmitting}
+                className={`rounded-md px-3 py-2 text-sm font-semibold text-black focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-indigo-600 ${
+                  isSubmitting 
+                    ? 'bg-gray-400 cursor-not-allowed' 
+                    : 'bg-[#3dd477] cursor-pointer hover:bg-green-500'
+                }`}
               >
-                Register
+                {isSubmitting ? 'Registering...' : 'Register'}
               </button>
             </div>
 

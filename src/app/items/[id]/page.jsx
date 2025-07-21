@@ -27,7 +27,6 @@ function Item() {
       prev === 0 ? auction.imageUrls.length - 1 : prev - 1
     );
   };
-  console.log('auction', auction);
   useEffect(() => {
     const interval = setInterval(() => setNow(new Date()), 1000);
     return () => clearInterval(interval);
@@ -120,7 +119,7 @@ function Item() {
         <h1 className="text-2xl font-bold mt-4">{auction.title}</h1>
         <p className="text-gray-600 mt-2">{auction.description}</p>
         <div className="text-lg mt-4">
-          Current Bid: <CurrencyFormat price={auction.startingBid} /> ৳
+          Current Bid: <CurrencyFormat price={auction.startingBid} /> $
         </div>
         <p className="mt-2">
           {" "}
@@ -147,7 +146,7 @@ function Item() {
           </div>
         )}
 
-        {session?.user.role === "buyer" && now > start && now < end && (
+        {session?.user.role === "buyer" && !session?.user.blocked && now > start && now < end && (
           <div className="mt-4">
             <input
               type="number"
@@ -157,7 +156,7 @@ function Item() {
               placeholder="Enter your bid"
             />
             <button
-              className="bg-blue-500 text-white px-4 py-2 ml-2 rounded"
+              className="bg-blue-500 text-white px-4 py-2 ml-2 rounded cursor-pointer hover:bg-blue-600 transition-colors"
               onClick={handleBid}
               disabled={loading}
             >
@@ -183,19 +182,28 @@ function Item() {
             {auction.bids
               .slice()
               .reverse()
-              .map((bid, index) => (
-                <li key={index} className=" p-2 rounded bg-gray-200">
-                  <a className={`text-sm text-gray-700 hover:text-gray-900 font-bold`} href={`/profile/${bid.bidder?._id}`}>
-                    {bid.bidder?.username || "Anonymous"}
-                  </a>
-                  <div className="text-sm text-green-400 font-semibold">
-                    Amount: <CurrencyFormat price={bid.amount} /> ৳
-                  </div>
-                  <p className="text-sm text-gray-500">
-                    Time: {new Date(bid.time).toLocaleString()}
-                  </p>
-                </li>
-              ))}
+              .map((bid, index) => {
+                const isBlocked = bid.bidder?.blocked; // ✅ check this per bid
+                return (
+                  <li
+                    key={index}
+                    className={`p-2 rounded ${isBlocked ? 'bg-red-100' : 'bg-gray-200'} shadow-sm hover:shadow-md transition-shadow`}
+                  >
+                    <a
+                      className={`text-sm ${isBlocked ? 'text-black cursor-not-allowed' : 'text-blue-500 hover:text-gray-700'} font-bold`}
+                      href={isBlocked ? '/#' : `/profile/${bid.bidder?._id}`}
+                    >
+                      {bid.bidder?.username || "Anonymous"}
+                    </a>
+                    <div className="text-sm text-green-400 font-semibold">
+                      Amount: <CurrencyFormat price={bid.amount} /> $
+                    </div>
+                    <p className="text-sm text-gray-500">
+                      Time: {new Date(bid.time).toLocaleString()}
+                    </p>
+                  </li>
+                );
+              })}
           </ul>
         </div>
       </div>

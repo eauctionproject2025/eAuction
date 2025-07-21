@@ -36,8 +36,6 @@ function page() {
         setError('Invalid credentials. Please try again.');
         e.target.email.value = "";
         e.target.password.value = ""; 
-      }else if( role === "admin" && result?.ok) {
-        router.push('#'); ///admin/dashboard
       }else {
         router.push('/');
       }
@@ -132,7 +130,7 @@ function page() {
               <div className="mt-6 flex items-center justify-center md:justify-end gap-x-6">
                 <button
                   type="submit"
-                  className="rounded-md bg-blue-500 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  className="rounded-md bg-blue-500 px-3 py-2 text-sm font-semibold cursor-pointer text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 >
                   Login
                 </button>

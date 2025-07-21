@@ -167,7 +167,7 @@ export default function ProfilePage() {
                       </button>
                       <button
                         onClick={() => setEditMode(false)}
-                        className="bg-gray-500 text-red-500 px-4 py-2 rounded cursor-pointer hover:bg-gray-600"
+                        className="bg-red-300 text-red-800 px-4 py-2 rounded cursor-pointer hover:bg-red-500"
                       >
                         Cancel
                       </button>
@@ -182,7 +182,7 @@ export default function ProfilePage() {
             {user.description && (
               <p className="">Bio: {user.description}</p>
             )}
-            {isOwner && <p className=""> {user.email}</p>}
+            {/* {isOwner && <p className=""> {user.email}</p>} */}
             {user.address && !editMode && (
               <p className="">Address: {user.address}</p>
             )}
