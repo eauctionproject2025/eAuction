@@ -28,6 +28,7 @@ export default function CategoryManager() {
       alert('Please fill in all fields!');
       setName('');
       setIcon(null);
+      fileInputRef.current.value = ''; 
       
       // Reset file input properly
       if (fileInputRef.current) {
@@ -47,6 +48,7 @@ export default function CategoryManager() {
     
     const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}api/categories`, {
       method: 'POST',
+      body: formData,
       headers: {
         Authorization: `Bearer ${session?.token}`,
       },
@@ -63,9 +65,7 @@ export default function CategoryManager() {
       alert(`Failed to add category. ${error.message || ''}`);
       setName('');
       setIcon(null);
-      if (fileInputRef.current) {
-        fileInputRef.current.value = '';
-      }
+      fileInputRef.current.value = ''; 
     }
   };
   const deleteCategory = async (id) => {

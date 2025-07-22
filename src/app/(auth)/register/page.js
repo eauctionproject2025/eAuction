@@ -70,10 +70,21 @@ function RegisterPage() {
     try {
       const response = await registerUser(formData);
       
-      setShowSuccess(true);
-      setTimeout(() => {
+      if (response) {
+        setShowSuccess(true);
+        setTimeout(() => {
         router.push('/login');
-      }, 1000); 
+        }, 1000); 
+        e.target["first-name"].value = '';
+        e.target["last-name"].value = '';
+        e.target.email.value = '';
+        e.target.nid.value = '';  
+        e.target.password.value = '';
+        e.target.confirmPassword.value = '';
+        e.target.role.value = '';
+      } else {
+        alert(` ${response.msg || "Please try again."}`);
+      }
     } catch (error) {
       console.error("Registration error:", error);
       
