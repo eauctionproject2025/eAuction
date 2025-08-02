@@ -56,7 +56,7 @@ export default function Home() {
         
         // Fetch both in parallel instead of sequential
         const [auctionsResponse, categoriesResponse] = await Promise.all([
-          fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}api/auctions`), // Limit results
+          fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}api/auctions?limit=12`), // Limit results
           fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}api/categories?limit=5`) // Limit categories
         ]);
 

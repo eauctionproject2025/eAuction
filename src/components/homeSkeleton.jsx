@@ -25,8 +25,8 @@ export default function SkeletonGrid({ count = 8 }) {
       <div className="absolute left-0 top-1/2 -translate-y-1/2 w-7 h-9 bg-black/30 rounded-r z-10" />
       <div className="absolute right-0 top-1/2 -translate-y-1/2 w-7 h-9 bg-black/30 rounded-l z-10" />
     </div>
-    <div className="w-[90%] flex flex-col items-start justify-between mb-5">
-      <h2 className="text-lg font-bold bg-gray-200 mt-3 w-[120px] h-[30px] md:w-[150px] md:h-[40px]"></h2>
+    <div className="w-[90%] flex flex-col items-center justify-between mb-5">
+      <h2 className="text-lg self-start font-bold bg-gray-200 mt-3 w-[120px] h-[30px] md:w-[150px] md:h-[40px]"></h2>
 
       <div className="flex flex-wrap justify-center items-center gap-5 md:gap-6 p-4">
         {/* Skeletons for category cards */}
@@ -41,10 +41,13 @@ export default function SkeletonGrid({ count = 8 }) {
         <div className="w-[90px] h-[40px] md:w-[150px] md:h-[60px] rounded bg-gray-200 animate-pulse" />
       </div>
     </div>
-    <div className="w-[90%] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 p-4">
-      {Array.from({ length: count }).map((_, index) => (
-        <SkeletonCard key={index} />
-      ))}
+    <div className="w-[90%] flex flex-col gap-5">
+      <h2 className="text-lg self-start font-bold bg-gray-200 mt-3 w-[120px] h-[30px] md:w-[150px] md:h-[40px]"></h2>
+      <div className="w-[90%] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 p-4">
+        {Array.from({ length: count }).map((_, index) => (
+          <SkeletonCard key={index} />
+        ))}
+      </div>
     </div>
     </>
   );
