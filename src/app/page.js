@@ -29,9 +29,9 @@ export default function Home() {
 
   if (loading) return <HomeSkeleton />;
 
-  const activeAuctions = auctions.filter(a => new Date(a.endTime) > new Date() && new Date(a.startTime) < new Date()).slice(0, 4);
-  const upcomingAuctions = auctions.filter(a => new Date(a.startTime) > new Date()).slice(0, 4);
-  const endedAuctions = auctions.filter(a => new Date(a.endTime) < new Date()).slice(0, 4);
+  const activeAuctions = auctions.filter(a => new Date(a.endTime) > new Date() && new Date(a.startTime) < new Date()).slice(0, 8);
+  const upcomingAuctions = auctions.filter(a => new Date(a.startTime) > new Date()).slice(0, 8);
+  const endedAuctions = auctions.filter(a => new Date(a.endTime) < new Date()).slice(0, 8);
 
   const AuctionCard = ({ item }) => (
     <Link href={`/items/${item._id}`} className="group relative block bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden hover:shadow-md transition">

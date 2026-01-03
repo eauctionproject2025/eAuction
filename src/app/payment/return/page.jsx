@@ -6,11 +6,7 @@ export default function ReturnPage() {
   const router = useRouter();
 
   useEffect(() => {
-    // Redirect to profile after a short delay
     const timeout = setTimeout(() => {
-      // We assume user is logged in, redirect to their profile or dashboard
-      // Since we don't know the exact ID here easily without session, let's go to homepage or handle dynamically
-      // For now, let's just go home, user can navigate to profile
       router.push('/');
     }, 3000);
     return () => clearTimeout(timeout);
