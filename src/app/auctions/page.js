@@ -4,6 +4,7 @@ import axios from "axios";
 import Link from "next/link";
 import CurrencyFormat from "@/components/currencyFormat";
 import ItemSkeleton from "@/components/itemSkeleton";
+import Image from "next/image";
 
 export default function AllProducts() {
   const [auctions, setAuctions] = useState([]);
@@ -58,10 +59,12 @@ export default function AllProducts() {
             {filteredAuctions.map((item) => (
                <Link key={item._id} href={`/items/${item._id}`} className="group block bg-transparent/10 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden hover:shadow-md transition">
                   <div className="relative h-48 w-full bg-gray-200">
-                    <img 
+                     <Image 
                         src={item.imageUrls?.[0]} 
                         alt={item.title} 
                         className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-300" 
+                        width={'400'}
+                        height={'300'}
                     />
                      {new Date(item.endTime) < new Date() ? (
                         <div className="absolute top-2 right-2 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded">Ended</div>
