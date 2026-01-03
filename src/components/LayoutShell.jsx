@@ -6,18 +6,13 @@ import Footer from './footer';
 
 export default function LayoutShell({ children }) {
   const pathname = usePathname();
-  const isDashboard = pathname.startsWith('/admin');
+  // Check if current path is a dashboard path
+  const isDashboard = pathname.startsWith("/dashboard") || pathname.startsWith("/admin");
 
   return (
     <>
-      {!isDashboard && (
-        <div className="w-full flex items-center justify-center border-b border-[#00000033]">
-          <Navbar />
-        </div>
-      )}
-      <div className={`w-full pb-5 flex items-center justify-center ${
-        isDashboard ? 'pt-0 md:pt-0' : 'pt-15 md:pt-[100px]'
-      }`}>
+      {!isDashboard && <Navbar />}
+      <div className={`flex-grow ${!isDashboard ? "pt-20 md:pt-24" : ""}`}>
         {children}
       </div>
       {!isDashboard && (

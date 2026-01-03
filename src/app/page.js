@@ -1,138 +1,108 @@
-"use client"
-import Auction from "@/components/auction";
-import { useEffect, useState } from "react";
-import { useSession } from "next-auth/react";
-import Greet from '@/components/Greet';
-import Skeleton from "@/components/homeSkeleton";
-import CarouselSlide from "@/components/CarouselSlide";
-import offer4 from "@/public/item/offer4.jpg";
-import offer5 from "@/public/item/offer5.jpeg";
-import CategoryCard from "@/components/categoryCard";
+"use client";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import AuctionList from "@/components/AuctionList"; // Assuming this is reusable component or we create sections
+import HomeSkeleton from "@/components/homeSkeleton";
+import Link from "next/link";
+import Image from "next/image";
+import CurrencyFormat from "@/components/currencyFormat";
+import Banner from "@/components/Banner";
 
-const slides = [
-  {
-    title: 'Wholesale',
-    subtitle: 'Auctions',
-    description: 'Fleet, Finance & Copart Select Products',
-    buttonText: 'View Inventory',
-    buttonLink: '/allOffers',
-    image: offer4, 
-  },
-  {
-    title: 'Exclusive Deals',
-    subtitle: 'On All Brands',
-    description: 'Drive your dream today with 0% financing.',
-    buttonText: 'Browse Now',
-    buttonLink: '/allOffers',
-    image: offer5,
-  },
-];
 export default function Home() {
-  
   const [auctions, setAuctions] = useState([]);
-  const [greet, setGreet] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [categories, setCategories] = useState([]);
-
-  const { data: session } = useSession();
 
   useEffect(() => {
-    if (session && !sessionStorage.getItem("greeted")) {
-      setGreet(true);
-      sessionStorage.setItem("greeted", "true");
+    fetchAuctions();
+  }, []);
+
+  const fetchAuctions = async () => {
+    try {
+      const { data } = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}api/auctions`);
+      setAuctions(data);
+      setLoading(false);
+    } catch (error) {
+      console.error(error);
+      setLoading(false);
     }
-  }, [session]);
-  
-
-
-  const handleDelete = (deletedId) => {
-    setAuctions((prevAuctions) => prevAuctions.filter((auction) => auction._id !== deletedId));
   };
-  
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        
-        // Fetch both in parallel instead of sequential
-        const [auctionsResponse, categoriesResponse] = await Promise.all([
-          fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}api/auctions?limit=12`), // Limit results
-          fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}api/categories?limit=5`) // Limit categories
-        ]);
 
-        // Check if responses are ok
-        if (!auctionsResponse.ok || !categoriesResponse.ok) {
-          throw new Error('Failed to fetch data');
-        }
+  if (loading) return <HomeSkeleton />;
 
-        const [auctionsData, categoriesData] = await Promise.all([
-          auctionsResponse.json(),
-          categoriesResponse.json()
-        ]);
+  const activeAuctions = auctions.filter(a => new Date(a.endTime) > new Date() && new Date(a.startTime) < new Date()).slice(0, 4);
+  const upcomingAuctions = auctions.filter(a => new Date(a.startTime) > new Date()).slice(0, 4);
+  const endedAuctions = auctions.filter(a => new Date(a.endTime) < new Date()).slice(0, 4);
 
-        setAuctions(auctionsData);
-        setCategories(categoriesData.slice(0, 5)); // Fallback slice if backend doesn't support limit
-        
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        // Set empty arrays on error so UI still renders
-        setAuctions([]);
-        setCategories([]);
-      } finally {
-        // Always set loading to false
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []); 
+  const AuctionCard = ({ item }) => (
+    <Link href={`/items/${item._id}`} className="group relative block bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden hover:shadow-md transition">
+      <div className="relative h-48 w-full bg-gray-200">
+        <img 
+            src={item.imageUrls?.[0]} 
+            alt={item.title} 
+            className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-300" 
+        />
+        {new Date(item.endTime) < new Date() && (
+            <div className="absolute top-2 right-2 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded">Ended</div>
+        )}
+      </div>
+      <div className="p-4">
+        <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 truncate">{item.title}</h3>
+        <div className="flex justify-between items-center mt-2">
+            <div>
+                <p className="text-xs text-gray-500 dark:text-gray-400">Current Bid</p>
+                <div className="text-blue-600 font-bold"><CurrencyFormat price={item.currentBid || item.startingBid} /></div>
+            </div>
+            {new Date(item.endTime) > new Date() && (
+                 <div className="text-xs text-orange-600 font-semibold border border-orange-200 bg-orange-50 px-2 py-1 rounded">
+                    Active
+                 </div>
+            )}
+        </div>
+      </div>
+    </Link>
+  );
 
   return (
-    <div className="w-full flex flex-col items-center justify-center">
-      {greet && (
-        <Greet message= {`Welcome back ${session?.user.name} !`}/>
-      )}
-        {loading ? (
-          <Skeleton />
-        ) : (
-        <div className="w-full flex flex-col items-center justify-center ">
-          <div className="w-[90%] relative my-5">
-              {/* <Image src={offer1} alt="banner" width={1000} height={300} className="object-cover" /> */}
-              <CarouselSlide slides={slides} />
-          </div>
-          <div className="w-[90%] flex flex-col items-center justify-between mb-5">
-            <h2 className="text-lg font-bold self-start mb-2">Category</h2> <hr className="w-full border-black/30"/>
-            <div className=" flex flex-wrap justify-center gap-5 md:gap-6 p-4">
-                {categories.map((category) => (
-                    <CategoryCard key={category._id} category={category} />
-                ))}
-              <button className="outline outline-yellow-500 text-sm md:text-md text-yellow-500 px-2 w-[90px] h-[40px] md:w-[150px] md:h-[60px] font-semibold rounded hover:bg-yellow-500 hover:text-black shadow-md shadow-gray-500 hover:shadow-yellow-600 transition duration-500" onClick={() => window.location.href = "/category"}>
-                View All Categories
-              </button>
-            </div>
-            <h2 className="w-full text-lg font-bold mb-2 self-start">Auctions</h2>
-            <hr className="w-full border-black/30" />
-          </div>
-          <div className="w-[90%] flex flex-wrap justify-center gap-4 md:gap-7 p-4 items-center">
-            {auctions.map((auction) => (
-            <Auction
-              key={auction._id}
-              id={auction._id}
-              title={auction.title}
-              price={auction.startingBid}
-              href="#"
-              startTime={auction.startTime}
-              endTime={auction.endTime}
-              imgLink={auction.imageUrls|| auction.imageUrl}
-              categories={auction.categories}
-              seller={auction.seller._id} 
-              onDelete={handleDelete}
-              publicUrl={auction.cloudUrls|| auction.cloudUrl}
-            />
-            ))}
-          </div>
+    <div>
+        {/* Banner Section */}
+        <Banner />
+
+        <div className="max-w-7xl mx-auto px-4 py-16 space-y-16">
+            
+            {/* Active Section */}
+            <section>
+                <div className="flex justify-between items-end mb-6">
+                    <h2 className="text-3xl font-bold">Active Auctions</h2>
+                    <Link href="/auctions?status=active" className="text-blue-600 font-semibold hover:underline">See More</Link>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    {activeAuctions.length > 0 ? activeAuctions.map(item => <AuctionCard key={item._id} item={item} />) : <p className="text-gray-500">No active auctions at the moment.</p>}
+                </div>
+            </section>
+
+             {/* Upcoming Section */}
+             <section>
+                <div className="flex justify-between items-end mb-6">
+                    <h2 className="text-3xl font-bold">Upcoming</h2>
+                    <Link href="/auctions?status=upcoming" className="text-blue-600 font-semibold hover:underline">See More</Link>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    {upcomingAuctions.length > 0 ? upcomingAuctions.map(item => <AuctionCard key={item._id} item={item} />) : <p className="text-gray-500">No upcoming auctions.</p>}
+                </div>
+            </section>
+
+             {/* Ended Section */}
+             <section>
+                <div className="flex justify-between items-end mb-6">
+                    <h2 className="text-3xl font-bold">Recently Ended</h2>
+                    <Link href="/auctions?status=ended" className="text-blue-600 font-semibold hover:underline">See More</Link>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    {endedAuctions.length > 0 ? endedAuctions.map(item => <AuctionCard key={item._id} item={item} />) : <p className="text-gray-500">No ended auctions history.</p>}
+                </div>
+            </section>
+
         </div>
-        )}
     </div>
   );
 }

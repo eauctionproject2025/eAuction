@@ -21,6 +21,7 @@ export default function ProfilePage() {
   const [newImage, setNewImage] = useState(null);
   const [description, setDescription] = useState("");
   const [address, setAddress] = useState("");
+  console.log('user', user)
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -96,7 +97,7 @@ export default function ProfilePage() {
       {loading ? (
         <ProfileSkeleton />
       ) : (
-        <div className="w-[80%] md:[90%] lg:w-[70%] grid grid-cols-1 md:grid-cols-2 my-7 gap-4">
+        <div className="w-[80%] md:[90%] lg:w-[70%] mx-auto grid grid-cols-1 md:grid-cols-2 my-7 gap-4">
           {/* Profile Header */}
           <div className="profile-header flex flex-col gap-3 lg:gap-5 items-start justify-top shadow-md shadow-gray-700 rounded-md p-4">
             <Image
@@ -185,6 +186,42 @@ export default function ProfilePage() {
             {/* {isOwner && <p className=""> {user.email}</p>} */}
             {user.address && !editMode && (
               <p className="">Address: {user.address}</p>
+            )}
+
+            {isOwner && user.role === 'seller' && (
+              <div className="mt-4">
+                {user.stripeOnboardingComplete !== true ? (
+                   <button
+                    onClick={async () => {
+                      try {
+                        const session = await getSession();
+                        const token = session?.token;
+                        const { data } = await axios.post(
+                          `${process.env.NEXT_PUBLIC_BACKEND_URL}api/payments/create-onboarding-link`,
+                          {},
+                          {
+                            headers: { Authorization: `Bearer ${token}` },
+                          }
+                        );
+                        window.location.href = data.url;
+                      } catch (err) {
+                        console.error("Stripe Connect Error", err);
+                        alert("Failed to initiate Stripe Connect");
+                      }
+                    }}
+                    className="bg-blue-600 text-white px-4 py-2 rounded shadow hover:bg-blue-700 transition"
+                  >
+                    Connect with Stripe to Receive Payments
+                  </button>
+                ) : (
+                  <div className="flex items-center gap-2 text-green-400 bg-green-900/20 px-4 py-2 rounded border border-green-500/30">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    </svg>
+                    <span className="font-semibold">Wallet Connected</span>
+                  </div>
+                )}
+              </div>
             )}
           </div>
 

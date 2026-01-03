@@ -2,6 +2,7 @@
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
 import { useSession, signOut } from "next-auth/react";
+import { useTheme } from "@/context/ThemeContext";
 import { useRouter, useParams } from "next/navigation";
 import Image from "next/image";
 import guest from "@/public/profile/user.svg";
@@ -12,12 +13,13 @@ function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [showNavbar, setShowNavbar] = useState(true);
+  const { theme, toggleTheme } = useTheme();
 
   const router = useRouter();
 
   const menus = [
-    { id: 1, name: "All Auction", link: "/" },
-    { id: 2, name: "All Offers", link: "#" },
+    { id: 1, name: "Home", link: "/" },
+    { id: 2, name: "All Products", link: "/auctions" },
     { id: 3, name: "Membership", link: "#" },
     { id: 4, name: "Add Auction", link: "/createAuction" },
     { id: 5, name: "Contact", link: "#" },
@@ -60,20 +62,20 @@ function Navbar() {
 
   return (
     <div
-      className={`fixed top-0 left-0 w-full z-50 bg-white shadow transition-transform duration-300 ${
+      className={`fixed top-0 left-0 w-full z-50 bg-gray-600 shadow transition-transform duration-300 ${
         showNavbar ? "translate-y-0" : "-translate-y-full"
       }`}
     >
       {/* Top Row */}
       <div className="max-w-screen-xl mx-auto px-4 py-2 flex items-center justify-between gap-2 h-14 md:flex-nowrap flex-row">
         {/* Logo */}
-        <Link href="/" className="text-2xl font-semibold">
+        <Link href="/" className="text-2xl font-semibold text-yellow-500">
           BidWise
         </Link>
 
         {/* Search Bar (hidden on mobile) */}
         <div className="flex-grow h-7 md:h-9  lg:max-w-lg flex items-center border rounded-md overflow-hidden">
-          <form onSubmit={handleSearch} className="flex w-full h-full flex items-center justify-between">
+          <form onSubmit={handleSearch} className="text-white flex w-full h-full flex items-center justify-between">
             <input
               type="text"
               value={searchTerm}
@@ -130,14 +132,12 @@ function Navbar() {
 
         {/* Desktop Auth */}
         <div className="hidden md:flex items-center space-x-4">
-          {role === "admin" ? (
-            <Link
-              href="/admin/dashboard"
-              className="px-3 py-1.5 text-sm bg-gray-600 text-white rounded hover:text-gray-600 hover:bg-yellow-400"
-            >
-              Dashboard
-            </Link>
-          ) : session ? (
+          {/* Theme Toggle */}
+          <button onClick={toggleTheme} className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition">
+              {theme === 'light' ? '☀️' : '🌙'}
+          </button>
+
+          {session ? (
             <div className="relative">
               <button
                 onClick={() => setUserMenuOpen(!userMenuOpen)}
@@ -151,10 +151,17 @@ function Navbar() {
                 />
               </button>
               {userMenuOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white border rounded shadow-md z-50 p-2">
+                <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 border dark:border-gray-700 rounded shadow-md z-50 p-2 text-gray-900 dark:text-gray-100">
+                  <Link 
+                    href="/dashboard" 
+                    className="block px-3 py-1.5 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer mb-1 border-b dark:border-gray-700 font-bold"
+                    onClick={() => setUserMenuOpen(false)}
+                  >
+                    Dashboard
+                  </Link>
                   <Link
                     href={`/profile/${userId}`}
-                    className="block px-3 py-1.5 text-sm hover:bg-gray-100 text-gray-900 cursor-pointer"
+                    className="block px-3 py-1.5 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
                     onClick={() => setUserMenuOpen(false)}
                   >
                     Profile
@@ -164,7 +171,7 @@ function Navbar() {
                       handleSignOut();
                       setUserMenuOpen(false);
                     }}
-                    className="w-full text-left px-3 py-1.5 text-sm hover:bg-gray-100 text-red-400 cursor-pointer"
+                    className="w-full text-left px-3 py-1.5 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 text-red-500 cursor-pointer"
                   >
                     Sign out
                   </button>
