@@ -14,12 +14,6 @@ export default function SellerDashboard() {
   const [totalEarnings, setTotalEarnings] = useState(0);
   const [pendingPayouts, setPendingPayouts] = useState(0);
 
-  useEffect(() => {
-    if (session?.user?.id) {
-      fetchData();
-    }
-  }, [session, fetchData]);
-
   const fetchData = async () => {
     try {
       const { data } = await axios.get(
@@ -33,6 +27,13 @@ export default function SellerDashboard() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (session?.user?.id) {
+      fetchData();
+    }
+  }, [session, fetchData]);
+
 
   const calculateStats = (data) => {
       let earned = 0;
