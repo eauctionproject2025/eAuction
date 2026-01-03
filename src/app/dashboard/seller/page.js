@@ -18,7 +18,7 @@ export default function SellerDashboard() {
     if (session?.user?.id) {
       fetchData();
     }
-  }, [session, ]);
+  }, [session, fetchData]);
 
   const fetchData = async () => {
     try {

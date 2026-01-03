@@ -101,7 +101,7 @@ export default function BuyerDashboard() {
                   </div>
               ))
           ) : (
-              <p className="text-gray-500 col-span-3">You haven't won any auctions yet.</p>
+              <p className="text-gray-500 col-span-3">You haven t won any auctions yet.</p>
           )}
        </div>
 
